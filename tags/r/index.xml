@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R | Puneet Sharma</title>
+    <link>/tags/r/</link>
+      <atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <description>R</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Puneet Sharma 2019</copyright><lastBuildDate>Wed, 17 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/img/logo.png</url>
+      <title>R</title>
+      <link>/tags/r/</link>
+    </image>
+    
+    <item>
+      <title>Beginning with R — The uncharted territory Part 2</title>
+      <link>/post/beginning-with-r-the-uncharted-territory-part-2/</link>
+      <pubDate>Wed, 17 Jul 2019 00:00:00 +0000</pubDate>
+      <guid>/post/beginning-with-r-the-uncharted-territory-part-2/</guid>
+      <description>
+
+
+&lt;!-- use a scroll box for wide output --&gt;
+&lt;!-- https://stackoverflow.com/questions/36845178/width-of-r-code-chunk-output-in-rmarkdown-files-knitr-ed-to-html --&gt;
+&lt;style&gt;
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+&lt;/style&gt;
+&lt;p&gt;For a recap of lists, vectors and matrices in R checkout &lt;a href=&#34;https://www.puneetks.com/post/beginning-with-r-the-uncharted-territory-part-1/&#34;&gt;Beginning with R — The uncharted territory Part 1&lt;/a&gt;.&lt;/p&gt;
+&lt;div id=&#34;table-of-contents&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Table of Contents&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#arrays&#34;&gt;&lt;strong&gt;Arrays&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#factors&#34;&gt;&lt;strong&gt;Factors&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#dataframes&#34;&gt;&lt;strong&gt;Dataframes&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;arrays&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;Arrays&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Array is an object which can hold multidimensional data. Matrices are a subset of arrays as in they are two dimensional arrays. So, together with an attribute of dimension i.e. &lt;code&gt;dim&lt;/code&gt;, arrays also have attribute &lt;code&gt;dimnames&lt;/code&gt;. Array is simply a multidimensional data structure.&lt;/p&gt;
+&lt;p&gt;Its syntax is &lt;code&gt;a &amp;lt;- array(data, dim = c(x,y,z,t...))&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;a &amp;lt;- array(1:24, dim = c(3,4,2)); print(a)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## , , 1
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    1    4    7   10
+## [2,]    2    5    8   11
+## [3,]    3    6    9   12
+## 
+## , , 2
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]   13   16   19   22
+## [2,]   14   17   20   23
+## [3,]   15   18   21   24&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;vec1 &amp;lt;- c(10,20,30,40)
+vec2 &amp;lt;- c(12,13,14,15)
+b &amp;lt;- array(c(vec1,vec2), dim = c(2,2,2)); print(b)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## , , 1
+## 
+##      [,1] [,2]
+## [1,]   10   30
+## [2,]   20   40
+## 
+## , , 2
+## 
+##      [,1] [,2]
+## [1,]   12   14
+## [2,]   13   15&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To define labels for different dimensions, use &lt;code&gt;dimnames&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;vec1 &amp;lt;- c(10,20,30,40)
+vec2 &amp;lt;- c(12,13,14,15)
+b &amp;lt;- array(c(vec1,vec2), dim=c(2,2,2), dimnames = list(c(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;),
+                                                      c(&amp;quot;d&amp;quot;, &amp;quot;e&amp;quot;),
+                                                      c(&amp;quot;g&amp;quot;, &amp;quot;h&amp;quot;))); print(b)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## , , g
+## 
+##    d  e
+## a 10 30
+## b 20 40
+## 
+## , , h
+## 
+##    d  e
+## a 12 14
+## b 13 15&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;arr &amp;lt;- array(1:27,dim=c(3,3,3)); print(arr)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## , , 1
+## 
+##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9
+## 
+## , , 2
+## 
+##      [,1] [,2] [,3]
+## [1,]   10   13   16
+## [2,]   11   14   17
+## [3,]   12   15   18
+## 
+## , , 3
+## 
+##      [,1] [,2] [,3]
+## [1,]   19   22   25
+## [2,]   20   23   26
+## [3,]   21   24   27&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;t &amp;lt;- arr[1:2,1:2,,drop=FALSE]; print(attributes(t)); print(t)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $dim
+## [1] 2 2 3&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## , , 1
+## 
+##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## 
+## , , 2
+## 
+##      [,1] [,2]
+## [1,]   10   13
+## [2,]   11   14
+## 
+## , , 3
+## 
+##      [,1] [,2]
+## [1,]   19   22
+## [2,]   20   23&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;factors&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;Factors&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;For the representation of categorical data, R has specific object called factors. Factors are basically integers and have labels associated with them. So, a particular number of factors are associated with a particular label. These labels are called levels. Factors look like characters but are integers in reality. Further uses of Factors are to sort all the categorical datasets according to one categorical dataset.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;factor()&lt;/code&gt; command is used to create a factor object.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fruits &amp;lt;- factor(c(&amp;#39;apple&amp;#39;,&amp;#39;orange&amp;#39;,&amp;#39;orange&amp;#39;,&amp;#39;apple&amp;#39;,&amp;#39;orange&amp;#39;,&amp;#39;banana&amp;#39;,&amp;#39;apple&amp;#39;))
+print(attributes(fruits))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $levels
+## [1] &amp;quot;apple&amp;quot;  &amp;quot;banana&amp;quot; &amp;quot;orange&amp;quot;
+## 
+## $class
+## [1] &amp;quot;factor&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The levels are by default unordered. To order them you can define the levels.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fruits &amp;lt;- factor(c(&amp;#39;apple&amp;#39;,&amp;#39;orange&amp;#39;,&amp;#39;orange&amp;#39;,&amp;#39;apple&amp;#39;,&amp;#39;orange&amp;#39;,&amp;#39;banana&amp;#39;,&amp;#39;apple&amp;#39;), 
+                 levels = c(&amp;#39;apple&amp;#39;, &amp;#39;orange&amp;#39;, &amp;#39;banana&amp;#39;))
+print(attributes(fruits))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $levels
+## [1] &amp;quot;apple&amp;quot;  &amp;quot;orange&amp;quot; &amp;quot;banana&amp;quot;
+## 
+## $class
+## [1] &amp;quot;factor&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;dataframes&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;Dataframes&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Dataframes are used to store tabular data. Lists of equal length are stored in dataframes.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;a &amp;lt;- data.frame(city=c(&amp;#39;Jaipur&amp;#39;,&amp;#39;Jammu&amp;#39;), rank = c(2,3)); print(a)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##     city rank
+## 1 Jaipur    2
+## 2  Jammu    3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The data stored can be of different type. One column may be character, another may be factors and so on. But each column must have same type of data.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Beginning with R — The uncharted territory Part 1</title>
+      <link>/post/beginning-with-r-the-uncharted-territory-part-1/</link>
+      <pubDate>Tue, 02 Jul 2019 00:00:00 +0000</pubDate>
+      <guid>/post/beginning-with-r-the-uncharted-territory-part-1/</guid>
+      <description>
+
+
+&lt;!-- use a scroll box for wide output --&gt;
+&lt;!-- https://stackoverflow.com/questions/36845178/width-of-r-code-chunk-output-in-rmarkdown-files-knitr-ed-to-html --&gt;
+&lt;style&gt;
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+&lt;/style&gt;
+&lt;p&gt;Coming from a non-programming background and &lt;a href=&#34;https://python.org&#34;&gt;Python&lt;/a&gt; being the first exposure to programming and data analysis, trying to get my hands dirty in &lt;a href=&#34;https://www.r-project.org/&#34;&gt;R&lt;/a&gt; seemed pretty daunting at first. R at times can feel a bit peculiar and unique since it is based on the premise of doing data analysis and statistics rather than software programming which is the case with python. But as I push myself and try to learn the many quirks and leverages of R over python, it sort of gives a different perspective of doing data analysis. Plus, there is a strong edge of using R over python — the vast and contemporary libraries of various statistical methodologies being implememted by statisticians world over.&lt;/p&gt;
+&lt;p&gt;Besides its quirks, the most interesting IDE developed so far for R — &lt;a href=&#34;https://www.rstudio.com/&#34;&gt;Rstudio&lt;/a&gt;, makes doing data analysis seem like fun activity. The various other things in Rstudio like making reports with support of &lt;span class=&#34;math inline&#34;&gt;\(\LaTeX\)&lt;/span&gt; and &lt;a href=&#34;https://en.wikipedia.org/wiki/HTML&#34;&gt;HTML&lt;/a&gt; and making static websites using &lt;a href=&#34;https://gohugo.io/&#34;&gt;HUGO&lt;/a&gt; is something which makes life soooo easy.&lt;/p&gt;
+&lt;p&gt;So lets start the journey of R.&lt;/p&gt;
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;div id=&#34;table-of-contents&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Table of Contents&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#introduction-to-r&#34;&gt;&lt;strong&gt;Introduction to R&lt;/strong&gt;&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#r-data-types&#34;&gt;&lt;strong&gt;R data types&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#handling-undefined-values&#34;&gt;&lt;strong&gt;Handling undefined values&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#operators&#34;&gt;&lt;strong&gt;Operators&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#data-structures&#34;&gt;&lt;strong&gt;Data structures&lt;/strong&gt;&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#lists&#34;&gt;&lt;strong&gt;Lists&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#vectors&#34;&gt;&lt;strong&gt;Vectors&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#matrices&#34;&gt;&lt;strong&gt;Matrices&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;introduction-to-r&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;&lt;strong&gt;Introduction to R&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;R is a dynamic language developed largely for statistical computing.&lt;/p&gt;
+&lt;div id=&#34;r-data-types&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;R data types&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Data type for a variable created in workspace is automatically assigned just like in Python.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;a &amp;lt;- 4.2; b &amp;lt;- &amp;#39;Hello!&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(a); print(b)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 4.2&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Hello!&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To check the type of variable, use &lt;code&gt;typeof()&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(typeof(a)); print(typeof(b))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;double&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;character&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Basic data types are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;String/Character&lt;/li&gt;
+&lt;li&gt;Number
+&lt;ul&gt;
+&lt;li&gt;Integer&lt;/li&gt;
+&lt;li&gt;Double&lt;/li&gt;
+&lt;li&gt;Complex&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Boolean/Logical&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A number whether integer or float is always represented as double.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;a &amp;lt;- 20; print(typeof(a))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;double&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For explicit requirement of integer, add suffix L&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;b &amp;lt;- 20L; print(typeof(b))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;integer&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;handling-undefined-values&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;Handling undefined values&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Handling undefined/missing values is somewhat different than python. Python has only &lt;code&gt;NaN&lt;/code&gt; values as undefined/missing values. In R, undefined values are basically represented using&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;NULL&lt;/li&gt;
+&lt;li&gt;NA&lt;/li&gt;
+&lt;li&gt;NaN&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;All of three work differently.&lt;/p&gt;
+&lt;p&gt;NULL which is a null object is used when there is no value present. If there is some value present in the vector or matrix and the value is not usable (fill_value), we use NA or NaN.&lt;/p&gt;
+&lt;p&gt;NA or NaN are missing value indicator.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(class(NULL)); print(class(NA)); print(class(NaN))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;NULL&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;logical&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;numeric&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;NA comes when there is no TRUE or FALSE i.e. logical indeterminacy. It can also come for missing value.&lt;/p&gt;
+&lt;p&gt;NaN means 0/0&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;operators&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;Operators&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Mathematical operations are just like in Python.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Multiplication *&lt;/li&gt;
+&lt;li&gt;Division /&lt;/li&gt;
+&lt;li&gt;Addition +&lt;/li&gt;
+&lt;li&gt;Subtraction -&lt;/li&gt;
+&lt;li&gt;Exponent ^&lt;/li&gt;
+&lt;li&gt;Modulus %%&lt;/li&gt;
+&lt;li&gt;Integer Division %/%&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Relational operators are same as in Python.&lt;/p&gt;
+&lt;p&gt;Logical operators are as follows:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Not !&lt;/li&gt;
+&lt;li&gt;Element wise AND &amp;amp;&lt;/li&gt;
+&lt;li&gt;AND &amp;amp;&amp;amp;&lt;/li&gt;
+&lt;li&gt;Element wise OR |&lt;/li&gt;
+&lt;li&gt;OR ||&lt;/li&gt;
+&lt;li&gt;In the set %in%&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;data-structures&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;Data structures&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;In R there are 6 types of data structures&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lists&lt;/li&gt;
+&lt;li&gt;Vectors (or Atomic vectors)&lt;/li&gt;
+&lt;li&gt;Matrices&lt;/li&gt;
+&lt;li&gt;Arrays&lt;/li&gt;
+&lt;li&gt;Factors&lt;/li&gt;
+&lt;li&gt;Data Frames&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div id=&#34;lists&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;strong&gt;Lists&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;List in R can hold elements of different types. There is no coercion. A list can contain numeric, characters, boolean, matrices, vectors, arrays, lists stc.&lt;/p&gt;
+&lt;p&gt;To create list, use &lt;code&gt;list()&lt;/code&gt; argument.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;list_data &amp;lt;- list(&amp;#39;green&amp;#39;, &amp;#39;yellow&amp;#39;, 1, 2, c(4,5,6))
+print(list_data)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] &amp;quot;green&amp;quot;
+## 
+## [[2]]
+## [1] &amp;quot;yellow&amp;quot;
+## 
+## [[3]]
+## [1] 1
+## 
+## [[4]]
+## [1] 2
+## 
+## [[5]]
+## [1] 4 5 6&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To give names to each entry of list, use &lt;code&gt;names()&lt;/code&gt; argument.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;names(list_data) &amp;lt;- c(&amp;quot;A&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;C&amp;quot;, &amp;quot;D&amp;quot;, &amp;quot;E&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To access a particular entry in list use &lt;code&gt;$&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(list_data$A); print(list_data$B) ### Access values of entries with name A and B&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;green&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;yellow&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(list_data[1]) ### Access first label and its value&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $A
+## [1] &amp;quot;green&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(list_data[[1]]) ### Access first value&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;green&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To merge two or more lists, use &lt;code&gt;c()&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;a &amp;lt;- list(1,2,3,4); b &amp;lt;- list(5,6,7,8); c &amp;lt;- c(a,b); print(c)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] 1
+## 
+## [[2]]
+## [1] 2
+## 
+## [[3]]
+## [1] 3
+## 
+## [[4]]
+## [1] 4
+## 
+## [[5]]
+## [1] 5
+## 
+## [[6]]
+## [1] 6
+## 
+## [[7]]
+## [1] 7
+## 
+## [[8]]
+## [1] 8&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Some predefined lists in R&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(letters); print(LETTERS); print(month.abb); print(month.name)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1] &amp;quot;a&amp;quot; &amp;quot;b&amp;quot; &amp;quot;c&amp;quot; &amp;quot;d&amp;quot; &amp;quot;e&amp;quot; &amp;quot;f&amp;quot; &amp;quot;g&amp;quot; &amp;quot;h&amp;quot; &amp;quot;i&amp;quot; &amp;quot;j&amp;quot; &amp;quot;k&amp;quot; &amp;quot;l&amp;quot; &amp;quot;m&amp;quot; &amp;quot;n&amp;quot; &amp;quot;o&amp;quot; &amp;quot;p&amp;quot; &amp;quot;q&amp;quot; &amp;quot;r&amp;quot; &amp;quot;s&amp;quot;
+## [20] &amp;quot;t&amp;quot; &amp;quot;u&amp;quot; &amp;quot;v&amp;quot; &amp;quot;w&amp;quot; &amp;quot;x&amp;quot; &amp;quot;y&amp;quot; &amp;quot;z&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1] &amp;quot;A&amp;quot; &amp;quot;B&amp;quot; &amp;quot;C&amp;quot; &amp;quot;D&amp;quot; &amp;quot;E&amp;quot; &amp;quot;F&amp;quot; &amp;quot;G&amp;quot; &amp;quot;H&amp;quot; &amp;quot;I&amp;quot; &amp;quot;J&amp;quot; &amp;quot;K&amp;quot; &amp;quot;L&amp;quot; &amp;quot;M&amp;quot; &amp;quot;N&amp;quot; &amp;quot;O&amp;quot; &amp;quot;P&amp;quot; &amp;quot;Q&amp;quot; &amp;quot;R&amp;quot; &amp;quot;S&amp;quot;
+## [20] &amp;quot;T&amp;quot; &amp;quot;U&amp;quot; &amp;quot;V&amp;quot; &amp;quot;W&amp;quot; &amp;quot;X&amp;quot; &amp;quot;Y&amp;quot; &amp;quot;Z&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1] &amp;quot;Jan&amp;quot; &amp;quot;Feb&amp;quot; &amp;quot;Mar&amp;quot; &amp;quot;Apr&amp;quot; &amp;quot;May&amp;quot; &amp;quot;Jun&amp;quot; &amp;quot;Jul&amp;quot; &amp;quot;Aug&amp;quot; &amp;quot;Sep&amp;quot; &amp;quot;Oct&amp;quot; &amp;quot;Nov&amp;quot; &amp;quot;Dec&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1] &amp;quot;January&amp;quot;   &amp;quot;February&amp;quot;  &amp;quot;March&amp;quot;     &amp;quot;April&amp;quot;     &amp;quot;May&amp;quot;       &amp;quot;June&amp;quot;     
+##  [7] &amp;quot;July&amp;quot;      &amp;quot;August&amp;quot;    &amp;quot;September&amp;quot; &amp;quot;October&amp;quot;   &amp;quot;November&amp;quot;  &amp;quot;December&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;vectors&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;strong&gt;Vectors&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;To create a vector, we use &lt;code&gt;c()&lt;/code&gt; function. It basically concatenates things like a list in python.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- c(1,2,3,4,5.4,&amp;#39;hello&amp;#39;,TRUE,FALSE); print(x)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;1&amp;quot;     &amp;quot;2&amp;quot;     &amp;quot;3&amp;quot;     &amp;quot;4&amp;quot;     &amp;quot;5.4&amp;quot;   &amp;quot;hello&amp;quot; &amp;quot;TRUE&amp;quot;  &amp;quot;FALSE&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As we can see, a vector can have any data type, be it number, character or boolean. But we notice something. All the elements in the vector are coerced to character type because the vector contains a string &lt;code&gt;&amp;quot;hello&amp;quot;&lt;/code&gt;. This is the effect of implicit coercion.&lt;/p&gt;
+&lt;p&gt;For strictly making a numeric vector, use &lt;code&gt;vector()&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- vector(&amp;quot;numeric&amp;quot;, length = 20); print(x)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can use such a vector to preallocate a vector which can be used for appending values from a &lt;code&gt;for&lt;/code&gt; loop which is faster than appending values to an empty vector since every time a value is appended in an empty vector, R makes a copy of it thus slowing the whole process.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Coercion&lt;/strong&gt; — Objects like vectors, data frames etc. can be coerced to different classess using &lt;code&gt;as.class&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- c(1,2,3,4); print(class(x))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;numeric&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;y &amp;lt;- as.character(x); print(class(y))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;character&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;y &amp;lt;- as.logical(x); print(class(y))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;logical&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;matrices&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;strong&gt;Matrices&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;Matrix is same as a vector except it has an additional attribute of dimension. It has two dimensional data structure.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;a &amp;lt;- matrix(c(6,2,6,8,3,2,6,8,0), nrow = 3, ncol = 3); print(a); print(attributes(a))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##      [,1] [,2] [,3]
+## [1,]    6    8    6
+## [2,]    2    3    8
+## [3,]    6    2    0&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $dim
+## [1] 3 3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Matrices start filling row wise. Whereas in python, a matrix starts filling columnwise.&lt;/p&gt;
+&lt;p&gt;In R, we can pass the names of rows and columns.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;a &amp;lt;- matrix(c(6,2,6,8,3,2,6,8,0), nrow = 3, ncol = 3,
+            dimnames = list(c(&amp;#39;a&amp;#39;,&amp;#39;b&amp;#39;,&amp;#39;c&amp;#39;), c(&amp;#39;x&amp;#39;,&amp;#39;y&amp;#39;,&amp;#39;z&amp;#39;))); print(a)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   x y z
+## a 6 8 6
+## b 2 3 8
+## c 6 2 0&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(colnames(a)); print(rownames(a))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;x&amp;quot; &amp;quot;y&amp;quot; &amp;quot;z&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;a&amp;quot; &amp;quot;b&amp;quot; &amp;quot;c&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To access the elements of a matrix, use square brackets.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;a1 &amp;lt;- matrix(c(6,2,6,8,3,2,6,8,0), nrow = 3, ncol = 3,
+            dimnames = list(c(&amp;#39;a&amp;#39;,&amp;#39;b&amp;#39;,&amp;#39;c&amp;#39;), c(&amp;#39;x&amp;#39;,&amp;#39;y&amp;#39;,&amp;#39;z&amp;#39;))); print(a)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   x y z
+## a 6 8 6
+## b 2 3 8
+## c 6 2 0&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(a1[2,2])              ### select 2nd row and 2nd column element &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 3&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(a1[c(2,3),c(1,2)])    ### select rows 2 and 3 and columns 1 and 2&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   x y
+## b 2 3
+## c 6 2&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;But &lt;code&gt;a[2,]&lt;/code&gt; (2nd row) or &lt;code&gt;a[,2]&lt;/code&gt; (2nd column) gives a vector. To avoid this i.e. to get a matrix, use &lt;code&gt;drop = FALSE&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(a[2,]); print(dim(a[2,]))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## x y z 
+## 2 3 8&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## NULL&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(a[2,,drop = FALSE]); print(dim(a[2,,drop = FALSE]))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   x y z
+## b 2 3 8&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 1 3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Specific indexing can also be done.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(a[c(1,2,4,6)])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 6 2 8 2&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can also do indexing using logical vectors.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(a[c(TRUE,FALSE,TRUE), c(TRUE,TRUE,FALSE)])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   x y
+## a 6 8
+## c 6 2&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To transpose a matrix use &lt;code&gt;t(a)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;To combine vectors or matrices, use &lt;code&gt;rbind&lt;/code&gt; or &lt;code&gt;cbind&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Dimension of matrix can also be changed (reshape)&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dim(a) &amp;lt;- c(1,9); print(dim(a))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 1 9&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Arrays, factors and data frames will be covered in &lt;a href=&#34;https://www.puneetks.com/post/beginning-with-r-the-uncharted-territory-part-2/&#34;&gt;next post&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

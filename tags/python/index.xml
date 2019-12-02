@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>python | Puneet Sharma</title>
+    <link>/tags/python/</link>
+      <atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <description>python</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Puneet Sharma 2019</copyright><lastBuildDate>Thu, 03 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/img/logo.png</url>
+      <title>python</title>
+      <link>/tags/python/</link>
+    </image>
+    
+    <item>
+      <title>Getting reliable K in K means clustering</title>
+      <link>/post/getting-reliable-k-in-k-means-clustering/</link>
+      <pubDate>Thu, 03 Oct 2019 00:00:00 +0000</pubDate>
+      <guid>/post/getting-reliable-k-in-k-means-clustering/</guid>
+      <description>
+
+
+&lt;!-- use a scroll box for wide output --&gt;
+&lt;!-- https://stackoverflow.com/questions/36845178/width-of-r-code-chunk-output-in-rmarkdown-files-knitr-ed-to-html --&gt;
+&lt;style&gt;
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+&lt;/style&gt;
+&lt;p&gt;Here I am sharing the codes for deriving the number of clusters in K means clustering algorithm as shown by Bhavesh Bhatt in his &lt;a href=&#34;https://www.youtube.com/watch?v=IEBsrUQ4eMc&#34;&gt;youtube video&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;https://www.youtube.com/embed/IEBsrUQ4eMc&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import math
+import matplotlib.pyplot as plt
+import matplotlib
+import numpy as np
+import seaborn as sns 
+from sklearn.cluster import KMeans
+import warnings&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;sns.set_color_codes()
+sns.set_context(&amp;quot;poster&amp;quot;)
+warnings.filterwarnings(&amp;quot;ignore&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;np.random.seed(8)
+a = np.random.multivariate_normal([10,0],[[3,1],[1,4]], size=[100,])
+b = np.random.multivariate_normal([0,20],[[3,1],[1,4]], size=[100,])
+c = np.random.multivariate_normal([20,30],[[3,1],[1,4]], size=[100,])
+X = np.concatenate((a,b,c))
+print X.shape&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (300, 2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.xlim(-5,35)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;plt.ylim(-5,35)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;plt.scatter(X[:,0],X[:,1], c=&amp;#39;b&amp;#39;, s=5)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-5-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;dist_points_from_cluster_center = []
+K = range(1,10)
+for no_of_clusters in K:
+    k_model = KMeans(n_clusters=no_of_clusters) ;
+    k_model.fit(X) ;
+    dist_points_from_cluster_center.append(k_model.inertia_) ;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print dist_points_from_cluster_center&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [70403.82188589728, 27407.17034387677, 2311.4033586287333, 1976.5540367939961, 1643.8735323124279, 1337.0526214543424, 1166.12005389885, 1036.87136535438, 942.9775249201616]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.grid()
+plt.plot(K, dist_points_from_cluster_center)
+plt.xlabel(&amp;quot;No. of clusters K&amp;quot;)
+plt.ylabel(&amp;quot;Sum of squared distance&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-8-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.grid()
+plt.plot(K,dist_points_from_cluster_center)
+plt.plot([K[0], K[8]], [dist_points_from_cluster_center[0],
+                       dist_points_from_cluster_center[8]], &amp;#39;ro-&amp;#39;)
+plt.xlabel(&amp;quot;No. of clusters K&amp;quot;)
+plt.ylabel(&amp;quot;Sum of squared distance&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-9-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;# Function to find distance
+# between a point and a line in 2-d
+
+def calc_distance(x1,y1,a,b,c):
+    return abs((a*x1+b*y1+c)) / (math.sqrt(a*a+b*b))&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;solving-linear-equation&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Solving linear equation&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://bobobobo.wordpress.com/2008/01/07/solving-linear-equations-ax-by-c-0/&#34;&gt;https://bobobobo.wordpress.com/2008/01/07/solving-linear-equations-ax-by-c-0/&lt;/a&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a = dist_points_from_cluster_center[0] - dist_points_from_cluster_center[8]
+b = K[8] - K[0]
+c1 = K[0] * dist_points_from_cluster_center[8]
+c2 = K[8] * dist_points_from_cluster_center[0]
+c = c1-c2&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;distance_of_points_from_line = []
+for k in range(9):
+    distance_of_points_from_line.append(
+    calc_distance(K[k], dist_points_from_cluster_center[k],a,b,c))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.grid()
+plt.plot(K, distance_of_points_from_line)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-13-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print &amp;quot;Optimum value of k = &amp;quot; + str(distance_of_points_from_line.index(max(distance_of_points_from_line))+1)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Optimum value of k = 3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Bootstrapping, Monte Carlo and all that… — Part2</title>
+      <link>/post/bootstrapping-monte-carlo-and-all-that-part2/</link>
+      <pubDate>Wed, 02 Oct 2019 00:00:00 +0000</pubDate>
+      <guid>/post/bootstrapping-monte-carlo-and-all-that-part2/</guid>
+      <description>
+
+
+&lt;!-- use a scroll box for wide output --&gt;
+&lt;!-- https://stackoverflow.com/questions/36845178/width-of-r-code-chunk-output-in-rmarkdown-files-knitr-ed-to-html --&gt;
+&lt;style&gt;
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+&lt;/style&gt;
+&lt;p&gt;In the &lt;a href=&#34;https://www.puneetks.com/post/bootstrapping-monte-carlo-and-all-that-part1/&#34;&gt;previous post&lt;/a&gt; we discussed why and when we need to use Monte Carlo simulations.&lt;/p&gt;
+&lt;p&gt;In this post I will try to use Monte Carlo methods to perform time series forecasting of monthly cloud fraction available from the climate model &lt;a href=&#34;http://www.cesm.ucar.edu/models/cesm1.2/cam/&#34;&gt;CESM 1.2 - CAM 5.3&lt;/a&gt; simulations over the Indian region.&lt;/p&gt;
+&lt;p&gt;Time series forecasting is probably the most challenging and equally fruitful technique to make intelligent and scientific predictions from a time series data. &lt;span class=&#34;citation&#34;&gt;(Larsen &lt;a href=&#34;#ref-kimlarson&#34;&gt;2016&lt;/a&gt;; Ocean &lt;a href=&#34;#ref-digitalocean&#34;&gt;2017&lt;/a&gt;)&lt;/span&gt;. A time series data has many facets to it such as the trend, seasonality and some residue/remainder. These three components are usually there in case of a real-world data. We will talk about all these things in a separate post. So let’s start the analysis!!&lt;/p&gt;
+&lt;p&gt;First we will read the data, average spatially over Central India and try to plot the daily time series of cloud fraction.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import cdms2, pandas, numpy, cdutil
+from calendar import isleap
+
+f = cdms2.open(&amp;#39;CLDTOT_AMIP_1979_2000_mon.nc&amp;#39;)
+data = f(&amp;#39;CLDTOT&amp;#39;)
+print data.shape&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (8030, 192, 288)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Central India is approximately 20N to 28N and 74E to 86E.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;data_cent_india = data(latitude=(20,28), longitude=(74,86))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let us visualize one time slice to check the region.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.basemap import Basemap, maskoceans
+import nclcmaps as ncm
+import cdms2
+from matplotlib import ticker
+import matplotlib as mpl
+
+data_sel = data_cent_india(time=(&amp;quot;1980-08-15&amp;quot;,&amp;quot;1980-08-15&amp;quot;), squeeze=1)
+
+lat = data_sel.getLatitude()
+lon = data_sel.getLongitude()
+
+lons, lats = np.meshgrid(lon, lat)
+
+
+cmap = ncm.cmaps(&amp;#39;BlGrYeOrReVi200&amp;#39;)
+
+my_dpi = 96
+vmin = 0.
+vmax = 1
+
+fig = plt.figure(figsize=(1200./my_dpi, 800./my_dpi))
+map1 = Basemap(resolution=&amp;#39;c&amp;#39;,projection=&amp;#39;cyl&amp;#39;,llcrnrlat=21.,urcrnrlat=27.,llcrnrlon=75.,urcrnrlon=85.)
+
+map1.drawparallels(np.arange(int(21),int(28),1),labels=[1,0,0,0], linewidth=0.0)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;map1.drawmeridians(np.arange(int(75),int(86),1),labels=[0,0,0,1], linewidth=0.0)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;datapc = map1.contourf(lons, lats, data_sel,  vmin=vmin, vmax=vmax, cmap=cmap, latlon=True)
+fig.tight_layout(pad=6,w_pad=6, h_pad=8)
+v=np.arange(0,1.1,0.1)
+bounds = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+                  
+ax2 = fig.add_axes([0.05, 0.04, 0.9, 0.025], aspect=0.03)
+cb = mpl.colorbar.ColorbarBase(ax2, cmap=cmap, orientation=&amp;#39;horizontal&amp;#39;, norm=norm, spacing=&amp;#39;proportional&amp;#39;, ticks=v, format=&amp;quot;%.1f&amp;quot;)
+
+tick_locator = ticker.MaxNLocator(nbins=11)
+cb.locator = tick_locator
+cb.update_ticks()
+
+plt.show()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-4-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;p style=&#34;text-align:center&#34;&gt;
+&lt;b&gt; Cloud fraction over Central India 1980-08-15. &lt;/b&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Now let us create the spatial average time series and visualize it.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import pandas,matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import matplotlib as mpl
+
+plt.rcParams[&amp;quot;legend.fontsize&amp;quot;] = 25
+mpl.rcParams[&amp;#39;xtick.labelsize&amp;#39;] = 20
+mpl.rcParams[&amp;#39;ytick.labelsize&amp;#39;] = 20
+
+plt.style.use(&amp;#39;fivethirtyeight&amp;#39;)
+dates = pandas.date_range(start=&amp;#39;1979-1-1&amp;#39;, end=&amp;#39;2000-12-31&amp;#39;, freq=&amp;#39;D&amp;#39;)
+
+leap = []
+for each in dates:
+    if each.month==2 and each.day ==29:
+        leap.append(each)
+
+dates = dates.drop(leap)
+
+cf_time_series = cdutil.averager(data_cent_india, axis=&amp;#39;yx&amp;#39;)
+cf_series_numpy = numpy.array(cf_time_series)
+df_series = pandas.DataFrame(cf_series_numpy,index=dates)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let us plot 2 years of daily time series (1979-1980).&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;
+df_sel = df_series[&amp;#39;1979-01-01&amp;#39;:&amp;#39;1980-12-31&amp;#39;]
+df_sel.columns = [&amp;#39;Cloud fraction&amp;#39;]
+#df_sel.plot(figsize=(25,10))
+#plt.show()
+
+
+
+# convert date objects from pandas format to python datetime
+index = [pandas.to_datetime(date, format=&amp;#39;%Y-%m-%d&amp;#39;).date() for date in dates]
+
+ax = df_sel.plot(figsize=(25,10))
+# set monthly locator
+ax.xaxis.set_major_locator(mdates.MonthLocator(interval=2))
+# set formatter
+ax.xaxis.set_major_formatter(mdates.DateFormatter(&amp;#39;%d-%m-%Y&amp;#39;))
+ax.tick_params(&amp;#39;both&amp;#39;, length=20, width=2, which=&amp;#39;major&amp;#39;)
+# set font and rotation for date tick labels
+plt.gcf().autofmt_xdate()
+plt.show()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-6-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;p&gt;From the time series, we see that there is a maximum of cloud cover over the Central India during June-July-August-September (JJAS) season which is the core monsoon season indicating high amount of deep clouds with larger spatial cover.&lt;/p&gt;
+&lt;p&gt;To use Monte Carlo methods, we will use a python package called &lt;code&gt;prophet&lt;/code&gt;. This package uses &lt;code&gt;Markov Chain Monte Carlo&lt;/code&gt; method to perform forecasting &lt;span class=&#34;citation&#34;&gt;(Ocean &lt;a href=&#34;#ref-digitalocean&#34;&gt;2017&lt;/a&gt;)&lt;/span&gt;. For more information on the package, please refer to &lt;span class=&#34;citation&#34;&gt;(Research, &lt;a href=&#34;#ref-facebook&#34;&gt;n.d.&lt;/a&gt;)&lt;/span&gt;.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import pandas
+from fbprophet import Prophet
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+mpl.rcParams[&amp;#39;xtick.labelsize&amp;#39;] = 10
+mpl.rcParams[&amp;#39;ytick.labelsize&amp;#39;] = 10
+plt.style.use(&amp;#39;fivethirtyeight&amp;#39;)
+
+df_series.columns = [&amp;#39;Cloud Fraction&amp;#39;]
+
+df_series[&amp;#39;Days&amp;#39;] = dates
+print df_series.head(5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##             Cloud Fraction       Days
+## 1979-01-01        0.000000 1979-01-01
+## 1979-01-02        0.580835 1979-01-02
+## 1979-01-03        0.201555 1979-01-03
+## 1979-01-04        0.096733 1979-01-04
+## 1979-01-05        0.158427 1979-01-05&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print df_series.dtypes&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Cloud Fraction           float64
+## Days              datetime64[ns]
+## dtype: object&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Prophet also imposes the strict condition that the input columns be named ds (the time column) and y (the metric column), so let’s rename the columns in our DataFrame:&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;- &lt;span class=&#34;citation&#34;&gt;(Ocean &lt;a href=&#34;#ref-digitalocean&#34;&gt;2017&lt;/a&gt;)&lt;/span&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;
+df_series = df_series.rename(columns={&amp;#39;Days&amp;#39;: &amp;#39;ds&amp;#39;,
+                        &amp;#39;Cloud Fraction&amp;#39;: &amp;#39;y&amp;#39;})
+
+print df_series.head(5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##                    y         ds
+## 1979-01-01  0.000000 1979-01-01
+## 1979-01-02  0.580835 1979-01-02
+## 1979-01-03  0.201555 1979-01-03
+## 1979-01-04  0.096733 1979-01-04
+## 1979-01-05  0.158427 1979-01-05&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let us visualize the forecast for the time series for next 5 years i.e. from 2001-2005.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;
+# set the uncertainty interval to 95% (the Prophet default is 80%)
+my_model = Prophet(interval_width=0.95, daily_seasonality=True)
+my_model.fit(df_series)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;future_dates = my_model.make_future_dataframe(periods=60, freq=&amp;#39;MS&amp;#39;)
+future_dates.tail()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;forecast = my_model.predict(future_dates)
+print forecast[[&amp;#39;ds&amp;#39;, &amp;#39;yhat&amp;#39;, &amp;#39;yhat_lower&amp;#39;, &amp;#39;yhat_upper&amp;#39;]].head()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;my_model.plot(forecast,uncertainty=True)
+plt.show()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-9-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;p&gt;Prophet also has the capability to analyse and present the components of the forecast such as trend and seasonality.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;
+my_model.plot_components(forecast)
+plt.show()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-10-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references&#34;&gt;
+&lt;div id=&#34;ref-kimlarson&#34;&gt;
+&lt;p&gt;Larsen, Kim. 2016. “Sorry Arima, but I’m Going Bayesian.” &lt;em&gt;Multiple Hypothesis Testing | Stitch Fix Technology – Multithreaded&lt;/em&gt;. &lt;a href=&#34;https://multithreaded.stitchfix.com/blog/2016/04/21/forget-arima/&#34;&gt;https://multithreaded.stitchfix.com/blog/2016/04/21/forget-arima/&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-digitalocean&#34;&gt;
+&lt;p&gt;Ocean, Digital. 2017. “A Guide to Time Series Forecasting with Prophet in Python 3.” &lt;em&gt;SQLite Vs MySQL Vs PostgreSQL: A Comparison of Relational Database Management Systems | DigitalOcean&lt;/em&gt;. &lt;a href=&#34;https://www.digitalocean.com/community/tutorials/a-guide-to-time-series-forecasting-with-prophet-in-python-3&#34;&gt;https://www.digitalocean.com/community/tutorials/a-guide-to-time-series-forecasting-with-prophet-in-python-3&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-facebook&#34;&gt;
+&lt;p&gt;Research, Facebook. n.d. “Prophet: Forecasting at Scale.” &lt;em&gt;Facebook Research&lt;/em&gt;. &lt;a href=&#34;https://research.fb.com/prophet-forecasting-at-scale/&#34;&gt;https://research.fb.com/prophet-forecasting-at-scale/&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Python — The swiss army knife Part 1</title>
+      <link>/post/python-the-swiss-army-knife-part-1/</link>
+      <pubDate>Sat, 27 Oct 2018 00:00:00 +0000</pubDate>
+      <guid>/post/python-the-swiss-army-knife-part-1/</guid>
+      <description>
+
+
+&lt;!-- use a scroll box for wide output --&gt;
+&lt;!-- https://stackoverflow.com/questions/36845178/width-of-r-code-chunk-output-in-rmarkdown-files-knitr-ed-to-html --&gt;
+&lt;style&gt;
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+&lt;/style&gt;
+&lt;p&gt;My first exposure to programming in my Ph.D. came in the form of reading a bunch of netcdf files containing precipitation time series, averaging the data over time and visualize it spatially. Initially, I tried to use NetCDF Operators &lt;a href=&#34;http://nco.sourceforge.net/&#34;&gt;(NCO)&lt;/a&gt; and Climate Data Operators &lt;a href=&#34;https://code.mpimet.mpg.de/projects/cdo/&#34;&gt;(CDO)&lt;/a&gt; to perform averaging or any other statistical analysis over the data, save the result in a seperate netcdf file, read the file in &lt;a href=&#34;https://www.ncl.ucar.edu/&#34;&gt;NCL&lt;/a&gt; and visualize it. But this whole procedure felt cumbersome and inefficient to me and whenever I did my analysis and visualization, I wished that somehow I could do all of it in the same programming environment!&lt;/p&gt;
+&lt;p&gt;As luck would have it, I found the solution to my predicament in the form of &lt;a href=&#34;https://www.python.org/&#34;&gt;Python&lt;/a&gt;. The data reading and analysis packages such as cdms2, cdutil, genutil in &lt;a href=&#34;https://cdat.llnl.gov/&#34;&gt;CDAT&lt;/a&gt; together with the power of numpy and scipy and visualization packages such as &lt;a href=&#34;https://www.pyngl.ucar.edu/&#34;&gt;PyNGL&lt;/a&gt;/&lt;a href=&#34;https://www.pyngl.ucar.edu/Nio.shtml&#34;&gt;PyNIO&lt;/a&gt;, &lt;a href=&#34;https://matplotlib.org/&#34;&gt;matplotlib&lt;/a&gt; and &lt;a href=&#34;https://seaborn.pydata.org/&#34;&gt;seaborn&lt;/a&gt; streamlined my workflow in a very efficient way.&lt;/p&gt;
+&lt;p&gt;But for leveraging the power of these packages, it is necessary to first grasp the basic syntax and nuances of Python programming. Here I will share the basics of python and in the subsequent posts we will see how these packages can simplify the whole process of data analysis and visualization. Please be aware that syntax followed in this post and further posts will be based on python 3. Some syntax such as print statement or iterating over dictionary will differ for python 2 and python 3.&lt;/p&gt;
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;div id=&#34;table-of-contents&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Table of Contents&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#python-introduction&#34;&gt;&lt;strong&gt;Python Introduction&lt;/strong&gt;&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#python-jargons&#34;&gt;&lt;strong&gt;Python jargons&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#data-structures-in-python&#34;&gt;&lt;strong&gt;Data structures in python&lt;/strong&gt;&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#list&#34;&gt;&lt;strong&gt;List&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#tuple&#34;&gt;&lt;strong&gt;Tuple&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#dictionary&#34;&gt;&lt;strong&gt;Dictionary&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;python-introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;&lt;strong&gt;Python Introduction&lt;/strong&gt;&lt;/h1&gt;
+&lt;div id=&#34;python-jargons&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;Python jargons&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Python is a dynamic language just like MATLAB. There is no need to define the type of any variable like we do in C or FORTRAN. For example&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a = 2.0; b = &amp;#39;hello&amp;#39;
+print (&amp;#39;a = &amp;#39;,a, &amp;#39;and&amp;#39;, &amp;#39;b = &amp;#39;,b)  &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (&amp;#39;a = &amp;#39;, 2.0, &amp;#39;and&amp;#39;, &amp;#39;b = &amp;#39;, &amp;#39;hello&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Every variable in python has a datatype. We do not define the type of a variable. Python automatically assigns the type. At any moment, to check the data type of a variable use &lt;code&gt;type&lt;/code&gt; function. For example&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print (type(b))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## &amp;lt;type &amp;#39;str&amp;#39;&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Basic data types are&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;String&lt;/li&gt;
+&lt;li&gt;Number
+&lt;ul&gt;
+&lt;li&gt;Integer&lt;/li&gt;
+&lt;li&gt;Long&lt;/li&gt;
+&lt;li&gt;Float&lt;/li&gt;
+&lt;li&gt;Complex&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Set&lt;/li&gt;
+&lt;li&gt;Boolean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each variable has with it associated methods. Methods are the operations which can be operated on a variable. For example&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print (b.split(&amp;#39;e&amp;#39;)) # Splits string into strings having characters before and after e&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [&amp;#39;h&amp;#39;, &amp;#39;llo&amp;#39;]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Mathematical operations are just like in MATLAB. Basic mathematical operations are&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Multiplication *&lt;/li&gt;
+&lt;li&gt;Division /&lt;/li&gt;
+&lt;li&gt;Addition +&lt;/li&gt;
+&lt;li&gt;Subtraction -&lt;/li&gt;
+&lt;li&gt;Exponent **&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;data-structures-in-python&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;Data structures in python&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Python has three important data structures&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;List&lt;/li&gt;
+&lt;li&gt;Tuple&lt;/li&gt;
+&lt;li&gt;Dictionary&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Use of each data structure will be explained further.&lt;/p&gt;
+&lt;div id=&#34;list&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;strong&gt;List&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;List is a data structure which can hold items regardless of their type. It can hold integers, strings, complex numbers etc. It can also hold many lists within itself. It is created by entering comma separated items in square brackets. For example :&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a_list = [1,2,3,&amp;#39;hello&amp;#39;]; print (a_list)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1, 2, 3, &amp;#39;hello&amp;#39;]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Check the methods associated with the list by typing &lt;code&gt;dir(a_list)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Before going further we talk about mutable and immutable data structures.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Mutable data structures are those data structures which can be altered in place. Which means we can delete an item, replace an item, alter an item, append an item inside that data structure.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Immutable data structures are those data structures which can not be altered in place. We can make copy of it with the changes to a different variable but we can not make any in place changes.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We will further look at examples to understand this.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;tuple&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;strong&gt;Tuple&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;Tuple is also a data structure which can hold items regardless of their type just like a list. It is created by entering comma separated items in parenthesis. For example :&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a_tuple = (1,2,3,&amp;#39;hello&amp;#39;,1.2); print (a_tuple)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (1, 2, 3, &amp;#39;hello&amp;#39;, 1.2)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Again check the methods associated with the tuple by typing &lt;code&gt;dir(a_tuple)&lt;/code&gt;. You will find that some methods available for list like pop, delete, append etc are missing for tuple. This is because a tuple is immutable. To change a tuple you need to create another tuple with the changes.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a_list.append(10)
+print (a_list)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1, 2, 3, &amp;#39;hello&amp;#39;, 10]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you try &lt;code&gt;a_tuple.append(10)&lt;/code&gt;, it will throw up error because tuple is an immutable object.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print (a_tuple)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (1, 2, 3, &amp;#39;hello&amp;#39;, 1.2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;new_tuple = (10,11)
+print (new_tuple)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (10, 11)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;final_tuple = a_tuple + new_tuple
+print (final_tuple)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (1, 2, 3, &amp;#39;hello&amp;#39;, 1.2, 10, 11)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The important difference between a list and a tuple is that all things being same, a list is a mutable container of items, a tuple on the other hand is immutable.&lt;/p&gt;
+&lt;p&gt;For this very reason, iterating over a tuple is always faster than iterating over a list.&lt;/p&gt;
+&lt;p&gt;We will talk about iterating over list, tuple and dictionary later.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;dictionary&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;strong&gt;Dictionary&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;Dictionary is the most versatile and probably the most helpful data structure in python.&lt;/p&gt;
+&lt;p&gt;Dictionary is also a mutable container of items but in dictionary we can assign each item or a list/tuple of items a key. A key acts as an identifier to a particular item or a list of items. A dictionary is created by entering comma separated key value pairs in curly brackets. Key value pairs hold a colon between them. For example :&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a_dict = {&amp;#39;Name&amp;#39;:&amp;#39;Puneet&amp;#39;, &amp;#39;Date of Birth&amp;#39;:6, &amp;#39;Month of Birth&amp;#39;:11, &amp;#39;Year of Birth&amp;#39;:1988, &amp;#39;Lab mates&amp;#39;: [&amp;#39;Ram&amp;#39;,&amp;#39;Amit&amp;#39;,&amp;#39;Satya&amp;#39;]}
+
+print (a_dict.keys())&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [&amp;#39;Month of Birth&amp;#39;, &amp;#39;Date of Birth&amp;#39;, &amp;#39;Year of Birth&amp;#39;, &amp;#39;Lab mates&amp;#39;, &amp;#39;Name&amp;#39;]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print (a_dict.values())&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [11, 6, 1988, [&amp;#39;Ram&amp;#39;, &amp;#39;Amit&amp;#39;, &amp;#39;Satya&amp;#39;], &amp;#39;Puneet&amp;#39;]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You will see that, once the dictionary is created, the order of printed items (keys) is not same as the order of entered items. But no need to worry! You can always access any item with its key.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print (a_dict[&amp;#39;Name&amp;#39;])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Puneet&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Please note that a dictionary is a mutable data structure.&lt;/p&gt;
+&lt;p&gt;Subsetting, iterating over data structures and different control statements will be covered in the &lt;a href=&#34;https://www.puneetks.com/post/python-the-swiss-army-knife-part-2/&#34;&gt;next post&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Phew!! That was a lot to talk about. I need a drink.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://thumbs.gfycat.com/SomberVainInchworm-size_restricted.gif&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Python — The swiss army knife Part 2</title>
+      <link>/post/python-the-swiss-army-knife-part-2/</link>
+      <pubDate>Sat, 27 Oct 2018 00:00:00 +0000</pubDate>
+      <guid>/post/python-the-swiss-army-knife-part-2/</guid>
+      <description>
+
+
+&lt;!-- use a scroll box for wide output --&gt;
+&lt;!-- https://stackoverflow.com/questions/36845178/width-of-r-code-chunk-output-in-rmarkdown-files-knitr-ed-to-html --&gt;
+&lt;style&gt;
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+&lt;/style&gt;
+&lt;p&gt;For a quick recap:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;List
+&lt;ul&gt;
+&lt;li&gt;a_list = [1,2,3,4,‘hello’]&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Tuple
+&lt;ul&gt;
+&lt;li&gt;a_tuple = (1,2,3,4,‘hello’)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Dictionary
+&lt;ul&gt;
+&lt;li&gt;a_dict = {‘Name’:‘Puneet’, ‘Age’:28}&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A &lt;code&gt;tuple&lt;/code&gt; is an immutable data structure while &lt;code&gt;list&lt;/code&gt; and &lt;code&gt;dictionary&lt;/code&gt; are mutable data structure.&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;div id=&#34;table-of-contents&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Table of Contents&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#slicing-a-list-or-a-tuple&#34;&gt;&lt;strong&gt;Slicing a list or a tuple&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Iterating-over-a-list-tuple-and-dictionary&#34;&gt;&lt;strong&gt;Iterating over a list, tuple and dictionary&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Some-helpful-constructs-in-python&#34;&gt;&lt;strong&gt;Some helpful constructs in python&lt;/strong&gt;&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#enumerate&#34;&gt;&lt;strong&gt;Enumerate&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#zip&#34;&gt;&lt;strong&gt;Zip&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#conditional-statements&#34;&gt;&lt;strong&gt;Conditional statements&lt;/strong&gt;&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#if-else&#34;&gt;&lt;strong&gt;if-else&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#if-elif-else&#34;&gt;&lt;strong&gt;if-elif-else&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#while&#34;&gt;&lt;strong&gt;while&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#break-and-continue&#34;&gt;&lt;strong&gt;Break and Continue&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#range-function&#34;&gt;&lt;strong&gt;Range function&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slicing-a-list-or-a-tuple&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;&lt;strong&gt;Slicing a list or a tuple&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;Slicing and subsetting a &lt;code&gt;list&lt;/code&gt; or a &lt;code&gt;tuple&lt;/code&gt; is same as selecting characters from a string. For example:&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a = [&amp;#39;my&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;is&amp;#39;, &amp;#39;anthony&amp;#39;, &amp;#39;gonsalves&amp;#39;]
+print(a[0], a[-1], a[:-1], a[1:3], sep=&amp;#39;\n&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## my
+## gonsalves
+## [&amp;#39;my&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;is&amp;#39;, &amp;#39;anthony&amp;#39;]
+## [&amp;#39;name&amp;#39;, &amp;#39;is&amp;#39;]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;b = (1,2,3,4,5,6)
+print (b[-1], b[2:4], sep=&amp;#39;\n&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 6
+## (3, 4)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A &lt;code&gt;list/tuple&lt;/code&gt; can contain many &lt;code&gt;lists/tuples&lt;/code&gt; as in nested &lt;code&gt;lists/tuples&lt;/code&gt;.A &lt;code&gt;list&lt;/code&gt; can contain &lt;code&gt;tuples&lt;/code&gt; as well as a &lt;code&gt;tuple&lt;/code&gt; can contain many &lt;code&gt;lists&lt;/code&gt;. Por ejemplo&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;nested_tuple = (1,2,3, [6,7])
+nested_list = [1,2,[5,6,7],[8,9]]
+print (nested_list[2], nested_list[1:3], sep=&amp;#39;\n&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [5, 6, 7]
+## [2, [5, 6, 7]]&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;Iterating-over-a-list-tuple-and-dictionary&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;&lt;strong&gt;Iterating over a list, tuple and dictionary&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;Iterating over items in a &lt;code&gt;list&lt;/code&gt;, &lt;code&gt;tuple&lt;/code&gt; or &lt;code&gt;dictionary&lt;/code&gt; is achieved using &lt;code&gt;for loop&lt;/code&gt;. For example&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;list_of_fruits = [&amp;#39;orange&amp;#39;, &amp;#39;banana&amp;#39;, &amp;#39;apple&amp;#39;, &amp;#39;papaya&amp;#39;]
+
+for i in list_of_fruits:
+    print (i)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## orange
+## banana
+## apple
+## papaya&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Similarly for &lt;code&gt;tuples&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;tuple_of_students = (&amp;#39;ravi&amp;#39;, &amp;#39;jack&amp;#39;, &amp;#39;ram&amp;#39;, &amp;#39;ronald&amp;#39;)
+
+for i in tuple_of_students:
+    print (i)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## ravi
+## jack
+## ram
+## ronald&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To iterate over a &lt;code&gt;dictionary&lt;/code&gt;,&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;dict_of_fruits = {&amp;#39;Apple&amp;#39;:3, &amp;#39;Orange&amp;#39;:2, &amp;#39;Banana&amp;#39;:8}
+
+for i, j in dict_of_fruits.items():
+    print (i,j)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Apple 3
+## Orange 2
+## Banana 8&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There are many more helpful iteration constructs which can be really fast and helpful.&lt;/p&gt;
+&lt;p&gt;Notice that whenever we write iteration constructs or control statements, we end the statement with a colon and indent the code. Indenting the code in python is forced. Without indenting, the code will throw up error. In principle, decide for one rule of indenting and follow it in all your coding statements. Indenting can be done for 1, 2 or any number of spaces or tab. Generally 4 space rule is followed. This forced indenting makes the code look cleaner and more readable.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;Some-helpful-constructs-in-python&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;&lt;strong&gt;Some helpful constructs in python&lt;/strong&gt;&lt;/h1&gt;
+&lt;div id=&#34;enumerate&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;Enumerate&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;enumerate&lt;/code&gt; is helpful when you want to iterate over a sequence of &lt;code&gt;list/tuple/dictionary/string&lt;/code&gt; such that you wish to access both the index and the item at the same time. For example&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;list_of_fruits = [&amp;#39;Apple&amp;#39;,&amp;#39;Orange&amp;#39;,&amp;#39;Banana&amp;#39;,&amp;#39;Grapes&amp;#39;,&amp;#39;Watermelon&amp;#39;]
+for i, val in enumerate(list_of_fruits):
+    print (i,val)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 0 Apple
+## 1 Orange
+## 2 Banana
+## 3 Grapes
+## 4 Watermelon&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;zip&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;Zip&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;zip&lt;/code&gt; function is helpful when you want to simultaneously iterate over multiple &lt;code&gt;lists/tuples/dictionaries&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;me  = [1,2,3,4]
+you = [5,6,7,8,9]
+
+for i, j in zip(me,you):
+    print (i,j)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 1 5
+## 2 6
+## 3 7
+## 4 8&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Notice that if &lt;code&gt;list/tuple/dictionaries&lt;/code&gt; are not of same length then the smaller length is iterated&lt;/p&gt;
+&lt;p&gt;There are many functions available in python which are helpful in many ways.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;
+a = [1,3,5,2,4]
+
+print (len(a), min(a), max(a))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 5 1 5&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conditional-statements&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;&lt;strong&gt;Conditional statements&lt;/strong&gt;&lt;/h1&gt;
+&lt;div id=&#34;if-else&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;if-else&lt;/strong&gt;&lt;/h2&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a = [1,2,3,4]
+
+for i in a:
+    if i&amp;gt;2:
+        print (i)
+    else:
+        print (&amp;#39;digit less than 2&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## digit less than 2
+## digit less than 2
+## 3
+## 4&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;if-elif-else&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;if-elif-else&lt;/strong&gt;&lt;/h2&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a = [1,2,3,4,5,6,7,8,9]
+
+for i in a:
+    if i&amp;lt;3:
+        print (&amp;#39;less than 3&amp;#39;)
+    elif i&amp;lt;6:
+        print (&amp;#39;less than 6&amp;#39;)
+    else:
+        print (i)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## less than 3
+## less than 3
+## less than 6
+## less than 6
+## less than 6
+## 6
+## 7
+## 8
+## 9&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;while&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;while&lt;/strong&gt;&lt;/h2&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;x = 0
+
+while x&amp;lt;5:
+    print (x) 
+    x = x + 1&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 0
+## 1
+## 2
+## 3
+## 4&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;break-and-continue&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;&lt;strong&gt;Break and Continue&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;Sometimes we need to stop the iteration if a condition is met and break out of the loop. Then we use &lt;code&gt;break&lt;/code&gt; statement.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a = [10,14,15,18,19,21,25,28]
+for i, val in enumerate(a):
+    if i &amp;gt; 3:
+        break
+    print (val)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 10
+## 14
+## 15
+## 18&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Sometimes during the iteration we want that if a condition is satisfied, the operation within the loop is skipped. Then we use &lt;code&gt;continue&lt;/code&gt; statement.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a = [1,2,3,4,6,8,9,10]
+for val in a:
+    if val%2==0:
+        continue
+    print (val)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 1
+## 3
+## 9&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;range-function&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;&lt;strong&gt;Range function&lt;/strong&gt;&lt;/h1&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import numpy
+arr = numpy.arange(10)
+for i in range(len(arr)):
+    print (i)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 0
+## 1
+## 2
+## 3
+## 4
+## 5
+## 6
+## 7
+## 8
+## 9&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+
+for i in range(0,len(a),3):
+    print (a[i])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 1
+## 4
+## 7
+## 10
+## 13&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Juggling NetCDF file in CDAT and NetCDF4-python</title>
+      <link>/post/juggling-netcdf-file-in-cdat-and-netcdf4-python/</link>
+      <pubDate>Thu, 25 Oct 2018 00:00:00 +0000</pubDate>
+      <guid>/post/juggling-netcdf-file-in-cdat-and-netcdf4-python/</guid>
+      <description>
+
+
+&lt;p&gt;People working in the field of atmospheric science and climate change often have to deal with data stored in a netCDF file format.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.unidata.ucar.edu/software/netcdf/&#34;&gt;NetCDF&lt;/a&gt; file has an extension &lt;em&gt;.nc&lt;/em&gt; and is used as a container of gridded data of different dimensions, variables and their associated attributes. Usually netCDF classic format is used to store the climate data.&lt;/p&gt;
+&lt;p&gt;Here we will use two different packages of python to access a model output in netcdf file format and access its variables.&lt;/p&gt;
+&lt;p&gt;We will be using the file which you can download from the following link. &lt;a href=&#34;https://drive.google.com/open?id=1Qb5oFg_6nK8nF5kztGyy4WPi5fvSgSj-&#34;&gt;CAM_run_2003_01_daily_data.nc&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;div id=&#34;cdat-way&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;CDAT way&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://cdat.llnl.gov/&#34;&gt;CDAT&lt;/a&gt; is a set of different python packages which together form a complete environment for climate data exploration and its visualization. It can access data in netCDF, HDF4 and grib data formats. For visualizing the results it includes packages such as VCS and matplotlib. To install CDAT using &lt;a href=&#34;https://conda.io/miniconda.html&#34;&gt;Conda&lt;/a&gt; run :
+&lt;br /&gt;
+&lt;code&gt;conda create -n cdat8 -c cdat/label/v80 -c conda-forge -c cdat python=2.7 cdat&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Import the cdms2 module
+import cdms2 &lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Load the netcdf file
+f = cdms2.open(&amp;#39;CAM_run_2003_01_daily_data.nc&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Store the variable names in a list 
+variable_names = f.listvariables()
+variable_names.sort()
+print (variable_names)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [&amp;#39;CLDTOT&amp;#39;, &amp;#39;CLOUD&amp;#39;, &amp;#39;P0&amp;#39;, &amp;#39;PS&amp;#39;, &amp;#39;hyam&amp;#39;, &amp;#39;hybm&amp;#39;, &amp;#39;time_bnds&amp;#39;]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Read the variable CLOUD 
+CLOUD_data = f(&amp;#39;CLOUD&amp;#39;)
+print (CLOUD_data.shape)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (31, 30, 192, 288)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here &lt;code&gt;(31,30,192,288)&lt;/code&gt; is the shape of the data where the first dimension is &lt;code&gt;time&lt;/code&gt;, second dimension is &lt;code&gt;levels&lt;/code&gt;, third dimension is &lt;code&gt;latitude&lt;/code&gt; and fourth dimension is &lt;code&gt;longitude&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;To know more about CDAT, follow the &lt;a href=&#34;https://cdms.readthedocs.io/en/cdmsdocsmerge/&#34;&gt;documentation&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;netcdf4-python-way&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;NetCDF4-python way&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;To install netcdf4-python using &lt;a href=&#34;https://conda.io/miniconda.html&#34;&gt;Conda&lt;/a&gt; run :
+&lt;br /&gt;
+&lt;code&gt;conda install -c conda-forge netcdf4&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Import the netCDF4 module
+import netCDF4 &lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Load the netcdf file
+f = netCDF4.Dataset(&amp;#39;CAM_run_2003_01_daily_data.nc&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Store the variable names in a list 
+variable_names = f.variables.keys() # variables in unicode
+variable_names = [x.encode(&amp;#39;UTF8&amp;#39;) for x in variable_names] # encode to string
+print (variable_names) &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [&amp;#39;CLDTOT&amp;#39;, &amp;#39;CLOUD&amp;#39;, &amp;#39;P0&amp;#39;, &amp;#39;PS&amp;#39;, &amp;#39;hyam&amp;#39;, &amp;#39;hybm&amp;#39;, &amp;#39;lat&amp;#39;, &amp;#39;lev&amp;#39;, &amp;#39;lon&amp;#39;, &amp;#39;time&amp;#39;, &amp;#39;time_bnds&amp;#39;]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Read the variable CLOUD 
+CLOUD_data = f.variables[&amp;#39;CLOUD&amp;#39;]
+print (CLOUD_data.shape)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (31, 30, 192, 288)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To know more about netcdf4-python, follow the &lt;a href=&#34;http://unidata.github.io/netcdf4-python/&#34;&gt;documentation&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

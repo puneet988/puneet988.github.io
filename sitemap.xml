@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2019-10-15T17:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/talk/</loc>
+    <lastmod>2019-10-15T17:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/talk/first-talk/</loc>
+    <lastmod>2019-10-15T17:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2019-10-02T00:38:33+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/</loc>
+    <lastmod>2019-10-02T00:38:33+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/getting-reliable-k-in-k-means-clustering/</loc>
+    <lastmod>2019-10-02T00:38:33+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/machine-learning/</loc>
+    <lastmod>2019-10-02T00:38:33+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/python/</loc>
+    <lastmod>2019-10-02T00:38:33+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/python/</loc>
+    <lastmod>2019-10-02T00:38:33+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/statistics/</loc>
+    <lastmod>2019-10-02T00:38:33+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2019-10-02T00:38:33+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/bootstrapping-monte-carlo-and-all-that-part2/</loc>
+    <lastmod>2019-10-02T00:28:22+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/beginning-with-r-the-uncharted-territory-part-2/</loc>
+    <lastmod>2019-10-01T16:02:45+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/r/</loc>
+    <lastmod>2019-10-01T16:02:45+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/beginning-with-r-the-uncharted-territory-part-1/</loc>
+    <lastmod>2019-10-01T15:47:38+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/authors/puneet-sharma/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication_types/2/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/authors/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/authors/charu-singh/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication/2019-01-01_climate_response_of_/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/authors/dilip-ganguly/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication/2019-01-01_impact_of_west_asia/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication_types/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/authors/shiwansha-mishra/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/bootstrapping-monte-carlo-and-all-that-part1/</loc>
+    <lastmod>2019-10-01T15:38:49+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/python-the-swiss-army-knife-part-1/</loc>
+    <lastmod>2019-10-01T11:52:25+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/python-the-swiss-army-knife-part-2/</loc>
+    <lastmod>2019-10-01T14:52:40+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/climate-data/</loc>
+    <lastmod>2019-09-30T22:27:22+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/juggling-netcdf-file-in-cdat-and-netcdf4-python/</loc>
+    <lastmod>2019-09-30T22:27:22+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/netcdf/</loc>
+    <lastmod>2019-09-30T22:27:22+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/academic/</loc>
+    <lastmod>2018-09-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/first-blog/</loc>
+    <lastmod>2018-09-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/hugo/</loc>
+    <lastmod>2018-09-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication_types/1/</loc>
+    <lastmod>2018-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication/2018-01-01_aerosol-cloud_inter/</loc>
+    <lastmod>2018-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/authors/admin/</loc>
+  </url>
+  
+</urlset>

@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.5.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Puneet Sharma">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Second part of bootstrapping and monte carlo. Applying the theory through python and practical examples">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/bootstrapping-monte-carlo-and-all-that-part2/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#328cc1">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin="anonymous">
+    
+
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.min.cd73122d35ab2a2d0b75ba1b1701e2f4.css">
+
+  
+    
+    
+    
+    
+      
+    
+    
+    
+    <link rel="stylesheet" href="/css/academic.118cf195061ff9458bd39527063d79a0.css">
+  
+
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-126669159-1', 'auto');
+      ga('set', 'anonymizeIp', true);
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+  
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon-32.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/bootstrapping-monte-carlo-and-all-that-part2/">
+
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="twitter:site" content="@puneetah">
+  <meta property="twitter:creator" content="@puneetah">
+  
+  <meta property="og:site_name" content="Puneet Sharma">
+  <meta property="og:url" content="/post/bootstrapping-monte-carlo-and-all-that-part2/">
+  <meta property="og:title" content="Bootstrapping, Monte Carlo and all that… — Part2 | Puneet Sharma">
+  <meta property="og:description" content="Second part of bootstrapping and monte carlo. Applying the theory through python and practical examples"><meta property="og:image" content="/img/logo.png">
+  <meta property="twitter:image" content="/img/logo.png"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2019-10-02T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2019-10-02T00:28:22&#43;05:30">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/bootstrapping-monte-carlo-and-all-that-part2/"
+  },
+  "headline": "Bootstrapping, Monte Carlo and all that… — Part2",
+  
+  "datePublished": "2019-10-02T00:00:00Z",
+  "dateModified": "2019-10-02T00:28:22+05:30",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Puneet Sharma"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Puneet Sharma",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/img/logo.png"
+    }
+  },
+  "description": "Second part of bootstrapping and monte carlo. Applying the theory through python and practical examples"
+}
+</script>
+
+  
+
+  
+
+
+  
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+<script>
+  window.addEventListener("load", function(){
+    window.cookieconsent.initialise({
+      "palette": {
+        "popup": {
+          "background": "#328cc1",
+          "text": "#fff"
+        },
+        "button": {
+          "background": "#fff",
+          "text": "#328cc1"
+        }
+      },
+      "theme": "classic",
+      "content": {
+        "message": "This website uses cookies to ensure you get the best experience on our website.",
+        "dismiss": "Got it!",
+        "link": "Learn more",
+        "href": "https://cookies.insites.com"
+      }
+    })});
+</script>
+
+
+
+  
+
+
+
+
+
+  <title>Bootstrapping, Monte Carlo and all that… — Part2 | Puneet Sharma</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0 compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/"><img src="/img/logo.png" alt="Puneet Sharma"></a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav mr-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#accomplishments"><span>Accomplishments</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#publications"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#talks"><span>Talks</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link  active" href="/post/"><span>Blogs</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/files/puneet_cv.pdf"><span>CV</span></a>
+        </li>
+
+        
+        
+
+      
+      </ul>
+      <ul class="navbar-nav ml-auto">
+      
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+        </li>
+        
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Bootstrapping, Monte Carlo and all that… — Part2</h1>
+
+  
+
+  
+    
+
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    Oct 2, 2019
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    4 min read
+  </span>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/post/bootstrapping-monte-carlo-and-all-that-part2/#disqus_thread"></a>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/categories/python/">Python</a></span>
+  
+
+  
+    
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/bootstrapping-monte-carlo-and-all-that-part2/&amp;text=Bootstrapping,%20Monte%20Carlo%20and%20all%20that%e2%80%a6%20%e2%80%94%20Part2" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/bootstrapping-monte-carlo-and-all-that-part2/&amp;t=Bootstrapping,%20Monte%20Carlo%20and%20all%20that%e2%80%a6%20%e2%80%94%20Part2" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Bootstrapping,%20Monte%20Carlo%20and%20all%20that%e2%80%a6%20%e2%80%94%20Part2&amp;body=/post/bootstrapping-monte-carlo-and-all-that-part2/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/bootstrapping-monte-carlo-and-all-that-part2/&amp;title=Bootstrapping,%20Monte%20Carlo%20and%20all%20that%e2%80%a6%20%e2%80%94%20Part2" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=Bootstrapping,%20Monte%20Carlo%20and%20all%20that%e2%80%a6%20%e2%80%94%20Part2%20/post/bootstrapping-monte-carlo-and-all-that-part2/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/bootstrapping-monte-carlo-and-all-that-part2/&amp;title=Bootstrapping,%20Monte%20Carlo%20and%20all%20that%e2%80%a6%20%e2%80%94%20Part2" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+
+<!-- use a scroll box for wide output -->
+<!-- https://stackoverflow.com/questions/36845178/width-of-r-code-chunk-output-in-rmarkdown-files-knitr-ed-to-html -->
+<style>
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+</style>
+<p>In the <a href="https://www.puneetks.com/post/bootstrapping-monte-carlo-and-all-that-part1/">previous post</a> we discussed why and when we need to use Monte Carlo simulations.</p>
+<p>In this post I will try to use Monte Carlo methods to perform time series forecasting of monthly cloud fraction available from the climate model <a href="http://www.cesm.ucar.edu/models/cesm1.2/cam/">CESM 1.2 - CAM 5.3</a> simulations over the Indian region.</p>
+<p>Time series forecasting is probably the most challenging and equally fruitful technique to make intelligent and scientific predictions from a time series data. <span class="citation">(Larsen <a href="#ref-kimlarson">2016</a>; Ocean <a href="#ref-digitalocean">2017</a>)</span>. A time series data has many facets to it such as the trend, seasonality and some residue/remainder. These three components are usually there in case of a real-world data. We will talk about all these things in a separate post. So let’s start the analysis!!</p>
+<p>First we will read the data, average spatially over Central India and try to plot the daily time series of cloud fraction.</p>
+<pre class="python"><code>import cdms2, pandas, numpy, cdutil
+from calendar import isleap
+
+f = cdms2.open(&#39;CLDTOT_AMIP_1979_2000_mon.nc&#39;)
+data = f(&#39;CLDTOT&#39;)
+print data.shape</code></pre>
+<pre><code>## (8030, 192, 288)</code></pre>
+<p>Central India is approximately 20N to 28N and 74E to 86E.</p>
+<pre class="python"><code>data_cent_india = data(latitude=(20,28), longitude=(74,86))</code></pre>
+<p>Let us visualize one time slice to check the region.</p>
+<pre class="python"><code>import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.basemap import Basemap, maskoceans
+import nclcmaps as ncm
+import cdms2
+from matplotlib import ticker
+import matplotlib as mpl
+
+data_sel = data_cent_india(time=(&quot;1980-08-15&quot;,&quot;1980-08-15&quot;), squeeze=1)
+
+lat = data_sel.getLatitude()
+lon = data_sel.getLongitude()
+
+lons, lats = np.meshgrid(lon, lat)
+
+
+cmap = ncm.cmaps(&#39;BlGrYeOrReVi200&#39;)
+
+my_dpi = 96
+vmin = 0.
+vmax = 1
+
+fig = plt.figure(figsize=(1200./my_dpi, 800./my_dpi))
+map1 = Basemap(resolution=&#39;c&#39;,projection=&#39;cyl&#39;,llcrnrlat=21.,urcrnrlat=27.,llcrnrlon=75.,urcrnrlon=85.)
+
+map1.drawparallels(np.arange(int(21),int(28),1),labels=[1,0,0,0], linewidth=0.0)</code></pre>
+<pre class="python"><code>map1.drawmeridians(np.arange(int(75),int(86),1),labels=[0,0,0,1], linewidth=0.0)</code></pre>
+<pre class="python"><code>datapc = map1.contourf(lons, lats, data_sel,  vmin=vmin, vmax=vmax, cmap=cmap, latlon=True)
+fig.tight_layout(pad=6,w_pad=6, h_pad=8)
+v=np.arange(0,1.1,0.1)
+bounds = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+                  
+ax2 = fig.add_axes([0.05, 0.04, 0.9, 0.025], aspect=0.03)
+cb = mpl.colorbar.ColorbarBase(ax2, cmap=cmap, orientation=&#39;horizontal&#39;, norm=norm, spacing=&#39;proportional&#39;, ticks=v, format=&quot;%.1f&quot;)
+
+tick_locator = ticker.MaxNLocator(nbins=11)
+cb.locator = tick_locator
+cb.update_ticks()
+
+plt.show()</code></pre>
+<p><img src="/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-4-1.png" /><!-- --></p>
+<p style="text-align:center">
+<b> Cloud fraction over Central India 1980-08-15. </b>
+</p>
+<p><br></p>
+<p>Now let us create the spatial average time series and visualize it.</p>
+<pre class="python"><code>import pandas,matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import matplotlib as mpl
+
+plt.rcParams[&quot;legend.fontsize&quot;] = 25
+mpl.rcParams[&#39;xtick.labelsize&#39;] = 20
+mpl.rcParams[&#39;ytick.labelsize&#39;] = 20
+
+plt.style.use(&#39;fivethirtyeight&#39;)
+dates = pandas.date_range(start=&#39;1979-1-1&#39;, end=&#39;2000-12-31&#39;, freq=&#39;D&#39;)
+
+leap = []
+for each in dates:
+    if each.month==2 and each.day ==29:
+        leap.append(each)
+
+dates = dates.drop(leap)
+
+cf_time_series = cdutil.averager(data_cent_india, axis=&#39;yx&#39;)
+cf_series_numpy = numpy.array(cf_time_series)
+df_series = pandas.DataFrame(cf_series_numpy,index=dates)</code></pre>
+<p>Let us plot 2 years of daily time series (1979-1980).</p>
+<pre class="python"><code>
+df_sel = df_series[&#39;1979-01-01&#39;:&#39;1980-12-31&#39;]
+df_sel.columns = [&#39;Cloud fraction&#39;]
+#df_sel.plot(figsize=(25,10))
+#plt.show()
+
+
+
+# convert date objects from pandas format to python datetime
+index = [pandas.to_datetime(date, format=&#39;%Y-%m-%d&#39;).date() for date in dates]
+
+ax = df_sel.plot(figsize=(25,10))
+# set monthly locator
+ax.xaxis.set_major_locator(mdates.MonthLocator(interval=2))
+# set formatter
+ax.xaxis.set_major_formatter(mdates.DateFormatter(&#39;%d-%m-%Y&#39;))
+ax.tick_params(&#39;both&#39;, length=20, width=2, which=&#39;major&#39;)
+# set font and rotation for date tick labels
+plt.gcf().autofmt_xdate()
+plt.show()</code></pre>
+<p><img src="/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-6-1.png" /><!-- --></p>
+<p>From the time series, we see that there is a maximum of cloud cover over the Central India during June-July-August-September (JJAS) season which is the core monsoon season indicating high amount of deep clouds with larger spatial cover.</p>
+<p>To use Monte Carlo methods, we will use a python package called <code>prophet</code>. This package uses <code>Markov Chain Monte Carlo</code> method to perform forecasting <span class="citation">(Ocean <a href="#ref-digitalocean">2017</a>)</span>. For more information on the package, please refer to <span class="citation">(Research, <a href="#ref-facebook">n.d.</a>)</span>.</p>
+<pre class="python"><code>import pandas
+from fbprophet import Prophet
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+mpl.rcParams[&#39;xtick.labelsize&#39;] = 10
+mpl.rcParams[&#39;ytick.labelsize&#39;] = 10
+plt.style.use(&#39;fivethirtyeight&#39;)
+
+df_series.columns = [&#39;Cloud Fraction&#39;]
+
+df_series[&#39;Days&#39;] = dates
+print df_series.head(5)</code></pre>
+<pre><code>##             Cloud Fraction       Days
+## 1979-01-01        0.000000 1979-01-01
+## 1979-01-02        0.580835 1979-01-02
+## 1979-01-03        0.201555 1979-01-03
+## 1979-01-04        0.096733 1979-01-04
+## 1979-01-05        0.158427 1979-01-05</code></pre>
+<pre class="python"><code>print df_series.dtypes</code></pre>
+<pre><code>## Cloud Fraction           float64
+## Days              datetime64[ns]
+## dtype: object</code></pre>
+<blockquote>
+<p>Prophet also imposes the strict condition that the input columns be named ds (the time column) and y (the metric column), so let’s rename the columns in our DataFrame:</p>
+</blockquote>
+<blockquote>
+<p>- <span class="citation">(Ocean <a href="#ref-digitalocean">2017</a>)</span></p>
+</blockquote>
+<pre class="python"><code>
+df_series = df_series.rename(columns={&#39;Days&#39;: &#39;ds&#39;,
+                        &#39;Cloud Fraction&#39;: &#39;y&#39;})
+
+print df_series.head(5)</code></pre>
+<pre><code>##                    y         ds
+## 1979-01-01  0.000000 1979-01-01
+## 1979-01-02  0.580835 1979-01-02
+## 1979-01-03  0.201555 1979-01-03
+## 1979-01-04  0.096733 1979-01-04
+## 1979-01-05  0.158427 1979-01-05</code></pre>
+<p>Let us visualize the forecast for the time series for next 5 years i.e. from 2001-2005.</p>
+<pre class="python"><code>
+# set the uncertainty interval to 95% (the Prophet default is 80%)
+my_model = Prophet(interval_width=0.95, daily_seasonality=True)
+my_model.fit(df_series)</code></pre>
+<pre class="python"><code>future_dates = my_model.make_future_dataframe(periods=60, freq=&#39;MS&#39;)
+future_dates.tail()</code></pre>
+<pre class="python"><code>forecast = my_model.predict(future_dates)
+print forecast[[&#39;ds&#39;, &#39;yhat&#39;, &#39;yhat_lower&#39;, &#39;yhat_upper&#39;]].head()</code></pre>
+<pre class="python"><code>my_model.plot(forecast,uncertainty=True)
+plt.show()</code></pre>
+<p><img src="/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-9-1.png" /><!-- --></p>
+<p>Prophet also has the capability to analyse and present the components of the forecast such as trend and seasonality.</p>
+<pre class="python"><code>
+my_model.plot_components(forecast)
+plt.show()</code></pre>
+<p><img src="/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-10-1.png" /><!-- --></p>
+<p><br/></p>
+<div id="references" class="section level2">
+<h2>References</h2>
+<hr />
+<div id="refs" class="references">
+<div id="ref-kimlarson">
+<p>Larsen, Kim. 2016. “Sorry Arima, but I’m Going Bayesian.” <em>Multiple Hypothesis Testing | Stitch Fix Technology – Multithreaded</em>. <a href="https://multithreaded.stitchfix.com/blog/2016/04/21/forget-arima/">https://multithreaded.stitchfix.com/blog/2016/04/21/forget-arima/</a>.</p>
+</div>
+<div id="ref-digitalocean">
+<p>Ocean, Digital. 2017. “A Guide to Time Series Forecasting with Prophet in Python 3.” <em>SQLite Vs MySQL Vs PostgreSQL: A Comparison of Relational Database Management Systems | DigitalOcean</em>. <a href="https://www.digitalocean.com/community/tutorials/a-guide-to-time-series-forecasting-with-prophet-in-python-3">https://www.digitalocean.com/community/tutorials/a-guide-to-time-series-forecasting-with-prophet-in-python-3</a>.</p>
+</div>
+<div id="ref-facebook">
+<p>Research, Facebook. n.d. “Prophet: Forecasting at Scale.” <em>Facebook Research</em>. <a href="https://research.fb.com/prophet-forecasting-at-scale/">https://research.fb.com/prophet-forecasting-at-scale/</a>.</p>
+</div>
+</div>
+</div>
+
+    </div>
+
+    
+
+
+    
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tags/statistics/">Statistics</a>
+  
+  <a class="badge badge-light" href="/tags/python/">python</a>
+  
+</div>
+
+
+
+    
+      
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  <div class="media author-card">
+    
+      
+      <img class="portrait mr-3" src="/authors/admin/avatar_huad0a0bd1db6decad27f1ee6b9b1adeca_357557_250x250_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/">Puneet Sharma</a></h5>
+      <h6 class="card-subtitle">Research Scholar</h6>
+      <p class="card-text">My research interests include cloud &amp; aerosol modeling and statistics.</p>
+      <ul class="network-icon" aria-hidden="true">
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+          <li>
+            <a href="mailto:puneet.988@gmail.com" >
+              <i class="fas fa-envelope"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="https://twitter.com/puneetah" target="_blank" rel="noopener">
+              <i class="fab fa-twitter"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="https://scholar.google.co.in/citations?user=UTkMAfsAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+              <i class="ai ai-google-scholar"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="https://www.linkedin.com/in/puneet-sharma988/" target="_blank" rel="noopener">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="https://www.researchgate.net/profile/Puneet_Sharma16" target="_blank" rel="noopener">
+              <i class="ai ai-researchgate"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="https://github.com/puneet988" target="_blank" rel="noopener">
+              <i class="fab fa-github"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="/files/puneet_cv.pdf" >
+              <i class="ai ai-cv"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+
+      
+      
+      <div class="article-widget">
+        <div class="hr-light"></div>
+        <h3>Related</h3>
+        <ul>
+          
+          <li><a href="/post/bootstrapping-monte-carlo-and-all-that-part1/">Bootstrapping, Monte Carlo and all that… — Part1</a></li>
+          
+          <li><a href="/post/python-the-swiss-army-knife-part-1/">Python — The swiss army knife Part 1</a></li>
+          
+          <li><a href="/post/python-the-swiss-army-knife-part-2/">Python — The swiss army knife Part 2</a></li>
+          
+          <li><a href="/post/juggling-netcdf-file-in-cdat-and-netcdf4-python/">Juggling NetCDF file in CDAT and NetCDF4-python</a></li>
+          
+        </ul>
+      </div>
+      
+    
+
+    
+    <div class="article-widget">
+      
+<div class="post-nav">
+  
+  
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">Next</div>
+    <a href="/post/getting-reliable-k-in-k-means-clustering/" rel="next">Getting reliable K in K means clustering</a>
+  </div>
+  
+  
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">Previous</div>
+    <a href="/post/beginning-with-r-the-uncharted-territory-part-2/" rel="prev">Beginning with R — The uncharted territory Part 2</a>
+  </div>
+  
+</div>
+
+    </div>
+    
+
+    
+<section id="comments">
+  
+    
+<div id="disqus_thread"></div>
+<script>
+  let disqus_config = function () {
+    
+    
+    
+  };
+  (function() {
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+      return;
+    }
+    var d = document, s = d.createElement('script'); s.async = true;
+    s.src = 'https://' + "www-puneetks-com" + '.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  
+</section>
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+    <script src="/js/mathjax-config.js"></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/python.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "results found",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    <script id="dsq-count-scr" src="https://www-puneetks-com.disqus.com/count.js" async></script>
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/js/academic.min.130521ecfc6f534c52c158217bbff718.js"></script>
+
+    
+
+
+
+
+
+
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    &copy; Puneet Sharma 2019 &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

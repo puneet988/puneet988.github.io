@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Publications | Puneet Sharma</title>
+    <link>/publication/</link>
+      <atom:link href="/publication/index.xml" rel="self" type="application/rss+xml" />
+    <description>Publications</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Puneet Sharma 2019</copyright><lastBuildDate>Tue, 01 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/img/logo.png</url>
+      <title>Publications</title>
+      <link>/publication/</link>
+    </image>
+    
+    <item>
+      <title>Climate response of the south Asian monsoon system to West Asia, Tibetan Plateau and local dust emissions</title>
+      <link>/publication/2019-01-01_climate_response_of_/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>/publication/2019-01-01_climate_response_of_/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Impact of West Asia, Tibetan Plateau and local dust emissions on intra-seasonal oscillations of the South Asian monsoon rainfall</title>
+      <link>/publication/2019-01-01_impact_of_west_asia/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>/publication/2019-01-01_impact_of_west_asia/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Aerosol-Cloud interaction over the Bay of Bengal during polluted winter season: A modelling perspective.</title>
+      <link>/publication/2018-01-01_aerosol-cloud_inter/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/publication/2018-01-01_aerosol-cloud_inter/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

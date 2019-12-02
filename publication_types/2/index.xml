@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2 | Puneet Sharma</title>
+    <link>/publication_types/2/</link>
+      <atom:link href="/publication_types/2/index.xml" rel="self" type="application/rss+xml" />
+    <description>2</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Puneet Sharma 2019</copyright><lastBuildDate>Tue, 01 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/img/logo.png</url>
+      <title>2</title>
+      <link>/publication_types/2/</link>
+    </image>
+    
+    <item>
+      <title>Climate response of the south Asian monsoon system to West Asia, Tibetan Plateau and local dust emissions</title>
+      <link>/publication/2019-01-01_climate_response_of_/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>/publication/2019-01-01_climate_response_of_/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Impact of West Asia, Tibetan Plateau and local dust emissions on intra-seasonal oscillations of the South Asian monsoon rainfall</title>
+      <link>/publication/2019-01-01_impact_of_west_asia/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>/publication/2019-01-01_impact_of_west_asia/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

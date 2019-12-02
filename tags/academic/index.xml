@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>academic | Puneet Sharma</title>
+    <link>/tags/academic/</link>
+      <atom:link href="/tags/academic/index.xml" rel="self" type="application/rss+xml" />
+    <description>academic</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Puneet Sharma 2019</copyright><lastBuildDate>Tue, 11 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/img/logo.png</url>
+      <title>academic</title>
+      <link>/tags/academic/</link>
+    </image>
+    
+    <item>
+      <title>First blog</title>
+      <link>/post/first-blog/</link>
+      <pubDate>Tue, 11 Sep 2018 00:00:00 +0000</pubDate>
+      <guid>/post/first-blog/</guid>
+      <description>
+
+
+&lt;blockquote&gt;
+&lt;p&gt;Writing is hard work. A clear sentence is no accident. Very few sentences come out right the first time, or even the third time. Remember this in moments of despair. If you find that writing is hard, it’s because it &lt;em&gt;is&lt;/em&gt; hard.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;- William Zinsser, &lt;a href=&#34;https://www.amazon.com/gp/product/0060891548?ie=UTF8&amp;amp;tag=successfullifeco&#34;&gt;On Writing Well&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;These lines have always resonated in my mind whenever I sat down to write a technical article or some random thoughts circling in my mind for that matter.&lt;/p&gt;
+&lt;p&gt;Welcome to my first blog post!. I am really excited to start this journey. Blogs have always fascinated me more so because while writing a blog, one can be as free and candid as one wants when it comes to jotting down the thoughts in a coherent manner. Blogs are also a way to share your accumulated knowledge whether it is technical or some general stuff in an organised way.&lt;/p&gt;
+&lt;p&gt;Truth is I am no excellent writer, but with time I expect to share my thoughts and technical findings related to my field of research and statistics and grow with the scientific community.&lt;/p&gt;
+&lt;p&gt;Happy blogging !! 😃&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;P.S. To setup the blogging environment I followed the instructions mentioned on &lt;a href=&#34;https://www.tylerclavelle.com/code/2017/blogdown//&#34;&gt;Building a Blog with Blogdown and GitHUb&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Statistics | Puneet Sharma</title>
+    <link>/tags/statistics/</link>
+      <atom:link href="/tags/statistics/index.xml" rel="self" type="application/rss+xml" />
+    <description>Statistics</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Puneet Sharma 2019</copyright><lastBuildDate>Thu, 03 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/img/logo.png</url>
+      <title>Statistics</title>
+      <link>/tags/statistics/</link>
+    </image>
+    
+    <item>
+      <title>Getting reliable K in K means clustering</title>
+      <link>/post/getting-reliable-k-in-k-means-clustering/</link>
+      <pubDate>Thu, 03 Oct 2019 00:00:00 +0000</pubDate>
+      <guid>/post/getting-reliable-k-in-k-means-clustering/</guid>
+      <description>
+
+
+&lt;!-- use a scroll box for wide output --&gt;
+&lt;!-- https://stackoverflow.com/questions/36845178/width-of-r-code-chunk-output-in-rmarkdown-files-knitr-ed-to-html --&gt;
+&lt;style&gt;
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+&lt;/style&gt;
+&lt;p&gt;Here I am sharing the codes for deriving the number of clusters in K means clustering algorithm as shown by Bhavesh Bhatt in his &lt;a href=&#34;https://www.youtube.com/watch?v=IEBsrUQ4eMc&#34;&gt;youtube video&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;https://www.youtube.com/embed/IEBsrUQ4eMc&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import math
+import matplotlib.pyplot as plt
+import matplotlib
+import numpy as np
+import seaborn as sns 
+from sklearn.cluster import KMeans
+import warnings&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;sns.set_color_codes()
+sns.set_context(&amp;quot;poster&amp;quot;)
+warnings.filterwarnings(&amp;quot;ignore&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;np.random.seed(8)
+a = np.random.multivariate_normal([10,0],[[3,1],[1,4]], size=[100,])
+b = np.random.multivariate_normal([0,20],[[3,1],[1,4]], size=[100,])
+c = np.random.multivariate_normal([20,30],[[3,1],[1,4]], size=[100,])
+X = np.concatenate((a,b,c))
+print X.shape&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (300, 2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.xlim(-5,35)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;plt.ylim(-5,35)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;plt.scatter(X[:,0],X[:,1], c=&amp;#39;b&amp;#39;, s=5)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-5-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;dist_points_from_cluster_center = []
+K = range(1,10)
+for no_of_clusters in K:
+    k_model = KMeans(n_clusters=no_of_clusters) ;
+    k_model.fit(X) ;
+    dist_points_from_cluster_center.append(k_model.inertia_) ;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print dist_points_from_cluster_center&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [70403.82188589728, 27407.17034387677, 2311.4033586287333, 1976.5540367939961, 1643.8735323124279, 1337.0526214543424, 1166.12005389885, 1036.87136535438, 942.9775249201616]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.grid()
+plt.plot(K, dist_points_from_cluster_center)
+plt.xlabel(&amp;quot;No. of clusters K&amp;quot;)
+plt.ylabel(&amp;quot;Sum of squared distance&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-8-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.grid()
+plt.plot(K,dist_points_from_cluster_center)
+plt.plot([K[0], K[8]], [dist_points_from_cluster_center[0],
+                       dist_points_from_cluster_center[8]], &amp;#39;ro-&amp;#39;)
+plt.xlabel(&amp;quot;No. of clusters K&amp;quot;)
+plt.ylabel(&amp;quot;Sum of squared distance&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-9-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;# Function to find distance
+# between a point and a line in 2-d
+
+def calc_distance(x1,y1,a,b,c):
+    return abs((a*x1+b*y1+c)) / (math.sqrt(a*a+b*b))&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;solving-linear-equation&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Solving linear equation&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://bobobobo.wordpress.com/2008/01/07/solving-linear-equations-ax-by-c-0/&#34;&gt;https://bobobobo.wordpress.com/2008/01/07/solving-linear-equations-ax-by-c-0/&lt;/a&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a = dist_points_from_cluster_center[0] - dist_points_from_cluster_center[8]
+b = K[8] - K[0]
+c1 = K[0] * dist_points_from_cluster_center[8]
+c2 = K[8] * dist_points_from_cluster_center[0]
+c = c1-c2&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;distance_of_points_from_line = []
+for k in range(9):
+    distance_of_points_from_line.append(
+    calc_distance(K[k], dist_points_from_cluster_center[k],a,b,c))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.grid()
+plt.plot(K, distance_of_points_from_line)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-13-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print &amp;quot;Optimum value of k = &amp;quot; + str(distance_of_points_from_line.index(max(distance_of_points_from_line))+1)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Optimum value of k = 3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Bootstrapping, Monte Carlo and all that… — Part2</title>
+      <link>/post/bootstrapping-monte-carlo-and-all-that-part2/</link>
+      <pubDate>Wed, 02 Oct 2019 00:00:00 +0000</pubDate>
+      <guid>/post/bootstrapping-monte-carlo-and-all-that-part2/</guid>
+      <description>
+
+
+&lt;!-- use a scroll box for wide output --&gt;
+&lt;!-- https://stackoverflow.com/questions/36845178/width-of-r-code-chunk-output-in-rmarkdown-files-knitr-ed-to-html --&gt;
+&lt;style&gt;
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+&lt;/style&gt;
+&lt;p&gt;In the &lt;a href=&#34;https://www.puneetks.com/post/bootstrapping-monte-carlo-and-all-that-part1/&#34;&gt;previous post&lt;/a&gt; we discussed why and when we need to use Monte Carlo simulations.&lt;/p&gt;
+&lt;p&gt;In this post I will try to use Monte Carlo methods to perform time series forecasting of monthly cloud fraction available from the climate model &lt;a href=&#34;http://www.cesm.ucar.edu/models/cesm1.2/cam/&#34;&gt;CESM 1.2 - CAM 5.3&lt;/a&gt; simulations over the Indian region.&lt;/p&gt;
+&lt;p&gt;Time series forecasting is probably the most challenging and equally fruitful technique to make intelligent and scientific predictions from a time series data. &lt;span class=&#34;citation&#34;&gt;(Larsen &lt;a href=&#34;#ref-kimlarson&#34;&gt;2016&lt;/a&gt;; Ocean &lt;a href=&#34;#ref-digitalocean&#34;&gt;2017&lt;/a&gt;)&lt;/span&gt;. A time series data has many facets to it such as the trend, seasonality and some residue/remainder. These three components are usually there in case of a real-world data. We will talk about all these things in a separate post. So let’s start the analysis!!&lt;/p&gt;
+&lt;p&gt;First we will read the data, average spatially over Central India and try to plot the daily time series of cloud fraction.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import cdms2, pandas, numpy, cdutil
+from calendar import isleap
+
+f = cdms2.open(&amp;#39;CLDTOT_AMIP_1979_2000_mon.nc&amp;#39;)
+data = f(&amp;#39;CLDTOT&amp;#39;)
+print data.shape&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (8030, 192, 288)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Central India is approximately 20N to 28N and 74E to 86E.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;data_cent_india = data(latitude=(20,28), longitude=(74,86))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let us visualize one time slice to check the region.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.basemap import Basemap, maskoceans
+import nclcmaps as ncm
+import cdms2
+from matplotlib import ticker
+import matplotlib as mpl
+
+data_sel = data_cent_india(time=(&amp;quot;1980-08-15&amp;quot;,&amp;quot;1980-08-15&amp;quot;), squeeze=1)
+
+lat = data_sel.getLatitude()
+lon = data_sel.getLongitude()
+
+lons, lats = np.meshgrid(lon, lat)
+
+
+cmap = ncm.cmaps(&amp;#39;BlGrYeOrReVi200&amp;#39;)
+
+my_dpi = 96
+vmin = 0.
+vmax = 1
+
+fig = plt.figure(figsize=(1200./my_dpi, 800./my_dpi))
+map1 = Basemap(resolution=&amp;#39;c&amp;#39;,projection=&amp;#39;cyl&amp;#39;,llcrnrlat=21.,urcrnrlat=27.,llcrnrlon=75.,urcrnrlon=85.)
+
+map1.drawparallels(np.arange(int(21),int(28),1),labels=[1,0,0,0], linewidth=0.0)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;map1.drawmeridians(np.arange(int(75),int(86),1),labels=[0,0,0,1], linewidth=0.0)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;datapc = map1.contourf(lons, lats, data_sel,  vmin=vmin, vmax=vmax, cmap=cmap, latlon=True)
+fig.tight_layout(pad=6,w_pad=6, h_pad=8)
+v=np.arange(0,1.1,0.1)
+bounds = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+                  
+ax2 = fig.add_axes([0.05, 0.04, 0.9, 0.025], aspect=0.03)
+cb = mpl.colorbar.ColorbarBase(ax2, cmap=cmap, orientation=&amp;#39;horizontal&amp;#39;, norm=norm, spacing=&amp;#39;proportional&amp;#39;, ticks=v, format=&amp;quot;%.1f&amp;quot;)
+
+tick_locator = ticker.MaxNLocator(nbins=11)
+cb.locator = tick_locator
+cb.update_ticks()
+
+plt.show()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-4-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;p style=&#34;text-align:center&#34;&gt;
+&lt;b&gt; Cloud fraction over Central India 1980-08-15. &lt;/b&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Now let us create the spatial average time series and visualize it.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import pandas,matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import matplotlib as mpl
+
+plt.rcParams[&amp;quot;legend.fontsize&amp;quot;] = 25
+mpl.rcParams[&amp;#39;xtick.labelsize&amp;#39;] = 20
+mpl.rcParams[&amp;#39;ytick.labelsize&amp;#39;] = 20
+
+plt.style.use(&amp;#39;fivethirtyeight&amp;#39;)
+dates = pandas.date_range(start=&amp;#39;1979-1-1&amp;#39;, end=&amp;#39;2000-12-31&amp;#39;, freq=&amp;#39;D&amp;#39;)
+
+leap = []
+for each in dates:
+    if each.month==2 and each.day ==29:
+        leap.append(each)
+
+dates = dates.drop(leap)
+
+cf_time_series = cdutil.averager(data_cent_india, axis=&amp;#39;yx&amp;#39;)
+cf_series_numpy = numpy.array(cf_time_series)
+df_series = pandas.DataFrame(cf_series_numpy,index=dates)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let us plot 2 years of daily time series (1979-1980).&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;
+df_sel = df_series[&amp;#39;1979-01-01&amp;#39;:&amp;#39;1980-12-31&amp;#39;]
+df_sel.columns = [&amp;#39;Cloud fraction&amp;#39;]
+#df_sel.plot(figsize=(25,10))
+#plt.show()
+
+
+
+# convert date objects from pandas format to python datetime
+index = [pandas.to_datetime(date, format=&amp;#39;%Y-%m-%d&amp;#39;).date() for date in dates]
+
+ax = df_sel.plot(figsize=(25,10))
+# set monthly locator
+ax.xaxis.set_major_locator(mdates.MonthLocator(interval=2))
+# set formatter
+ax.xaxis.set_major_formatter(mdates.DateFormatter(&amp;#39;%d-%m-%Y&amp;#39;))
+ax.tick_params(&amp;#39;both&amp;#39;, length=20, width=2, which=&amp;#39;major&amp;#39;)
+# set font and rotation for date tick labels
+plt.gcf().autofmt_xdate()
+plt.show()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-6-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;p&gt;From the time series, we see that there is a maximum of cloud cover over the Central India during June-July-August-September (JJAS) season which is the core monsoon season indicating high amount of deep clouds with larger spatial cover.&lt;/p&gt;
+&lt;p&gt;To use Monte Carlo methods, we will use a python package called &lt;code&gt;prophet&lt;/code&gt;. This package uses &lt;code&gt;Markov Chain Monte Carlo&lt;/code&gt; method to perform forecasting &lt;span class=&#34;citation&#34;&gt;(Ocean &lt;a href=&#34;#ref-digitalocean&#34;&gt;2017&lt;/a&gt;)&lt;/span&gt;. For more information on the package, please refer to &lt;span class=&#34;citation&#34;&gt;(Research, &lt;a href=&#34;#ref-facebook&#34;&gt;n.d.&lt;/a&gt;)&lt;/span&gt;.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import pandas
+from fbprophet import Prophet
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+mpl.rcParams[&amp;#39;xtick.labelsize&amp;#39;] = 10
+mpl.rcParams[&amp;#39;ytick.labelsize&amp;#39;] = 10
+plt.style.use(&amp;#39;fivethirtyeight&amp;#39;)
+
+df_series.columns = [&amp;#39;Cloud Fraction&amp;#39;]
+
+df_series[&amp;#39;Days&amp;#39;] = dates
+print df_series.head(5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##             Cloud Fraction       Days
+## 1979-01-01        0.000000 1979-01-01
+## 1979-01-02        0.580835 1979-01-02
+## 1979-01-03        0.201555 1979-01-03
+## 1979-01-04        0.096733 1979-01-04
+## 1979-01-05        0.158427 1979-01-05&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print df_series.dtypes&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Cloud Fraction           float64
+## Days              datetime64[ns]
+## dtype: object&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Prophet also imposes the strict condition that the input columns be named ds (the time column) and y (the metric column), so let’s rename the columns in our DataFrame:&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;- &lt;span class=&#34;citation&#34;&gt;(Ocean &lt;a href=&#34;#ref-digitalocean&#34;&gt;2017&lt;/a&gt;)&lt;/span&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;
+df_series = df_series.rename(columns={&amp;#39;Days&amp;#39;: &amp;#39;ds&amp;#39;,
+                        &amp;#39;Cloud Fraction&amp;#39;: &amp;#39;y&amp;#39;})
+
+print df_series.head(5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##                    y         ds
+## 1979-01-01  0.000000 1979-01-01
+## 1979-01-02  0.580835 1979-01-02
+## 1979-01-03  0.201555 1979-01-03
+## 1979-01-04  0.096733 1979-01-04
+## 1979-01-05  0.158427 1979-01-05&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let us visualize the forecast for the time series for next 5 years i.e. from 2001-2005.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;
+# set the uncertainty interval to 95% (the Prophet default is 80%)
+my_model = Prophet(interval_width=0.95, daily_seasonality=True)
+my_model.fit(df_series)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;future_dates = my_model.make_future_dataframe(periods=60, freq=&amp;#39;MS&amp;#39;)
+future_dates.tail()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;forecast = my_model.predict(future_dates)
+print forecast[[&amp;#39;ds&amp;#39;, &amp;#39;yhat&amp;#39;, &amp;#39;yhat_lower&amp;#39;, &amp;#39;yhat_upper&amp;#39;]].head()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;my_model.plot(forecast,uncertainty=True)
+plt.show()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-9-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;p&gt;Prophet also has the capability to analyse and present the components of the forecast such as trend and seasonality.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;
+my_model.plot_components(forecast)
+plt.show()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-02-bootstrapping-monte-carlo-and-all-that-part2_files/figure-html/unnamed-chunk-10-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references&#34;&gt;
+&lt;div id=&#34;ref-kimlarson&#34;&gt;
+&lt;p&gt;Larsen, Kim. 2016. “Sorry Arima, but I’m Going Bayesian.” &lt;em&gt;Multiple Hypothesis Testing | Stitch Fix Technology – Multithreaded&lt;/em&gt;. &lt;a href=&#34;https://multithreaded.stitchfix.com/blog/2016/04/21/forget-arima/&#34;&gt;https://multithreaded.stitchfix.com/blog/2016/04/21/forget-arima/&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-digitalocean&#34;&gt;
+&lt;p&gt;Ocean, Digital. 2017. “A Guide to Time Series Forecasting with Prophet in Python 3.” &lt;em&gt;SQLite Vs MySQL Vs PostgreSQL: A Comparison of Relational Database Management Systems | DigitalOcean&lt;/em&gt;. &lt;a href=&#34;https://www.digitalocean.com/community/tutorials/a-guide-to-time-series-forecasting-with-prophet-in-python-3&#34;&gt;https://www.digitalocean.com/community/tutorials/a-guide-to-time-series-forecasting-with-prophet-in-python-3&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-facebook&#34;&gt;
+&lt;p&gt;Research, Facebook. n.d. “Prophet: Forecasting at Scale.” &lt;em&gt;Facebook Research&lt;/em&gt;. &lt;a href=&#34;https://research.fb.com/prophet-forecasting-at-scale/&#34;&gt;https://research.fb.com/prophet-forecasting-at-scale/&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Bootstrapping, Monte Carlo and all that… — Part1</title>
+      <link>/post/bootstrapping-monte-carlo-and-all-that-part1/</link>
+      <pubDate>Thu, 22 Nov 2018 00:00:00 +0000</pubDate>
+      <guid>/post/bootstrapping-monte-carlo-and-all-that-part1/</guid>
+      <description>
+
+
+&lt;p&gt;Extracting relevant results from a particular dataset requires a rigorous understanding of its statistical properties - mainly the type of distribution the data possesses. For some underlying statistical distribution in the data, parametric tests are applied to infer statistical properties of a particular estimator. It may also happen that the data does not possess any specific statistical distribution in which case, nonparametric tests are applied.&lt;/p&gt;
+&lt;p&gt;In statistical paradigm, we define an estimator to be a rule to conclude statistic of some unknown parameter from the data. For example, a &lt;strong&gt;mean&lt;/strong&gt; is an estimator and &lt;strong&gt;mean of a sample&lt;/strong&gt; from the dataset is statistic.&lt;/p&gt;
+&lt;p&gt;Assuming that the data in hand is obtained for a variable following a certain measurement procedure, it will inherently possess some error - random error or systematic error - which will impart some uncertainty to various statistics we try to infer from the data. This uncertainty is basically an interval around derived statistic and defines the probability of interval of the true value of the statistic.&lt;/p&gt;
+&lt;p&gt;Now, since the system from which the data is derived is not a fully deterministic system because of its inherent stochasticity, to make any predictions from the data we try to model it statistically. But the robustness of statistical model in terms of prediction is something which is highly desirable. This is where Monte Carlo simulations come to the rescue. Monte Carlo simulations are performed on the proposed statistical model to generate thousands of samples using some randomly generated data with known parameters (for example data randomly generated from a normal probability distribution function i.e. normal PDF with known parameters like mean, median etc.) to estimate the characteristics of the sampling distribution. By doing this we get a range of estimates of a particular characteristics (let’s say &lt;strong&gt;median&lt;/strong&gt;). This range of values of &lt;strong&gt;median&lt;/strong&gt; for our statistical model together with the probability or likeliness of a particular value of median is crucial for understanding the robustness of our statistical model.&lt;/p&gt;
+&lt;p&gt;The method of bootstrapping is a special case of Monte Carlo simulation in which instead of generating random data from a distribution, sampling with replacement is performed from the population of available data (also known as historical data) regardless of its distribution to generate statistics of sampling distribution.&lt;/p&gt;
+&lt;p&gt;In essence, we can say that Monte Carlo simulation is essentially used to understand how well a particular estimator performs for a particular statistical model/distribution whereas bootstrapping is used to derive and understand the variability of a particular dataset in hand for which the distribution is unknown.&lt;/p&gt;
+&lt;p&gt;In the &lt;a href=&#34;https://www.puneetks.com/post/bootstrapping-monte-carlo-and-all-that-part2/&#34;&gt;next post&lt;/a&gt;, we will try to apply and understand both the methods using some test data in order to realise the power of these two methods.&lt;/p&gt;
+&lt;p&gt;Tada!! 😃&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

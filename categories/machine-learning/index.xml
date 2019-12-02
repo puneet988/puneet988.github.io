@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Machine Learning | Puneet Sharma</title>
+    <link>/categories/machine-learning/</link>
+      <atom:link href="/categories/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    <description>Machine Learning</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Puneet Sharma 2019</copyright><lastBuildDate>Thu, 03 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/img/logo.png</url>
+      <title>Machine Learning</title>
+      <link>/categories/machine-learning/</link>
+    </image>
+    
+    <item>
+      <title>Getting reliable K in K means clustering</title>
+      <link>/post/getting-reliable-k-in-k-means-clustering/</link>
+      <pubDate>Thu, 03 Oct 2019 00:00:00 +0000</pubDate>
+      <guid>/post/getting-reliable-k-in-k-means-clustering/</guid>
+      <description>
+
+
+&lt;!-- use a scroll box for wide output --&gt;
+&lt;!-- https://stackoverflow.com/questions/36845178/width-of-r-code-chunk-output-in-rmarkdown-files-knitr-ed-to-html --&gt;
+&lt;style&gt;
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+&lt;/style&gt;
+&lt;p&gt;Here I am sharing the codes for deriving the number of clusters in K means clustering algorithm as shown by Bhavesh Bhatt in his &lt;a href=&#34;https://www.youtube.com/watch?v=IEBsrUQ4eMc&#34;&gt;youtube video&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;https://www.youtube.com/embed/IEBsrUQ4eMc&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import math
+import matplotlib.pyplot as plt
+import matplotlib
+import numpy as np
+import seaborn as sns 
+from sklearn.cluster import KMeans
+import warnings&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;sns.set_color_codes()
+sns.set_context(&amp;quot;poster&amp;quot;)
+warnings.filterwarnings(&amp;quot;ignore&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;np.random.seed(8)
+a = np.random.multivariate_normal([10,0],[[3,1],[1,4]], size=[100,])
+b = np.random.multivariate_normal([0,20],[[3,1],[1,4]], size=[100,])
+c = np.random.multivariate_normal([20,30],[[3,1],[1,4]], size=[100,])
+X = np.concatenate((a,b,c))
+print X.shape&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (300, 2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.xlim(-5,35)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;plt.ylim(-5,35)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;plt.scatter(X[:,0],X[:,1], c=&amp;#39;b&amp;#39;, s=5)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-5-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;dist_points_from_cluster_center = []
+K = range(1,10)
+for no_of_clusters in K:
+    k_model = KMeans(n_clusters=no_of_clusters) ;
+    k_model.fit(X) ;
+    dist_points_from_cluster_center.append(k_model.inertia_) ;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print dist_points_from_cluster_center&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [70403.82188589728, 27407.17034387677, 2311.4033586287333, 1976.5540367939961, 1643.8735323124279, 1337.0526214543424, 1166.12005389885, 1036.87136535438, 942.9775249201616]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.grid()
+plt.plot(K, dist_points_from_cluster_center)
+plt.xlabel(&amp;quot;No. of clusters K&amp;quot;)
+plt.ylabel(&amp;quot;Sum of squared distance&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-8-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.grid()
+plt.plot(K,dist_points_from_cluster_center)
+plt.plot([K[0], K[8]], [dist_points_from_cluster_center[0],
+                       dist_points_from_cluster_center[8]], &amp;#39;ro-&amp;#39;)
+plt.xlabel(&amp;quot;No. of clusters K&amp;quot;)
+plt.ylabel(&amp;quot;Sum of squared distance&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-9-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;# Function to find distance
+# between a point and a line in 2-d
+
+def calc_distance(x1,y1,a,b,c):
+    return abs((a*x1+b*y1+c)) / (math.sqrt(a*a+b*b))&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;solving-linear-equation&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Solving linear equation&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://bobobobo.wordpress.com/2008/01/07/solving-linear-equations-ax-by-c-0/&#34;&gt;https://bobobobo.wordpress.com/2008/01/07/solving-linear-equations-ax-by-c-0/&lt;/a&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;a = dist_points_from_cluster_center[0] - dist_points_from_cluster_center[8]
+b = K[8] - K[0]
+c1 = K[0] * dist_points_from_cluster_center[8]
+c2 = K[8] * dist_points_from_cluster_center[0]
+c = c1-c2&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;distance_of_points_from_line = []
+for k in range(9):
+    distance_of_points_from_line.append(
+    calc_distance(K[k], dist_points_from_cluster_center[k],a,b,c))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;fig = plt.figure(figsize=(15, 10))
+plt.grid()
+plt.plot(K, distance_of_points_from_line)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-03-getting-reliable-k-in-k-means-clustering_files/figure-html/unnamed-chunk-13-1.png&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;print &amp;quot;Optimum value of k = &amp;quot; + str(distance_of_points_from_line.index(max(distance_of_points_from_line))+1)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Optimum value of k = 3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

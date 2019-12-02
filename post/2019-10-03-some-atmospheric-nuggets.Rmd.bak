@@ -1,0 +1,83 @@
+---
+title: Some atmospheric nuggets
+author: Puneet Sharma
+date: '2019-10-03'
+draft: true
+slug: some-atmospheric-nuggets
+output:
+    html_document:
+        number_sections: TRUE
+    blogdown::html_page:
+        toc: no
+        fig_width: 5
+        fig_height: 5
+    prettydoc::html_pretty:
+        theme: cayman
+        highlight: github
+categories: []
+tags:
+  - Atmospheric Science
+bibliography: blog_posts.bib
+link-citations: true
+header:
+  caption: ''
+  image: 'headers/atmosphere-blue-sky-cloud-216630.jpg'
+subtitle: ''
+summary: 'In this post I will share some of the topics I came across while interpreting my research results.'
+authors: []
+lastmod: '2019-10-02T00:54:25+05:30'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<!-- use a scroll box for wide output --> 
+<!-- https://stackoverflow.com/questions/36845178/width-of-r-code-chunk-output-in-rmarkdown-files-knitr-ed-to-html --> 
+<style>
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+</style>
+
+
+For a newbie in atmospheric sciences, the amount of information and various concepts related to basic atmospheric science and meteorology can become a bit overwhelming to process and understand. Here, I will share some of the atmospheric science nuggets I came across while trying to interpret my results. I will keep updating the post as and when I come across something worth mentioning in this post 😃 .
+
+<br/>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("render_toc.R")
+```
+
+# Table of Contents
+
+```{r toc, echo=FALSE} 
+render_toc("2019-10-03-some-atmospheric-nuggets.Rmd")
+```
+
+<br/>
+
+# **Understanding clouds** {#understanding-clouds}
+
+To understand clouds, we need to understand 3 fundamental characteristics of clouds which overall define them.
+
+1. What constitutes the clouds.
+2. Macrophysical properties of clouds.
+3. Microphysical properties of clouds.
+
+## **What constitutes the clouds** {#what-constitutes-clouds}
+
+At a very elementary level, cloud is a mass of water drops or ice crystals suspended in the atmosphere [@dunbar_2015].   
+
+<br/>
+
+References
+----------
+----------

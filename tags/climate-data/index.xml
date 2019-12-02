@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>climate data | Puneet Sharma</title>
+    <link>/tags/climate-data/</link>
+      <atom:link href="/tags/climate-data/index.xml" rel="self" type="application/rss+xml" />
+    <description>climate data</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Puneet Sharma 2019</copyright><lastBuildDate>Thu, 25 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/img/logo.png</url>
+      <title>climate data</title>
+      <link>/tags/climate-data/</link>
+    </image>
+    
+    <item>
+      <title>Juggling NetCDF file in CDAT and NetCDF4-python</title>
+      <link>/post/juggling-netcdf-file-in-cdat-and-netcdf4-python/</link>
+      <pubDate>Thu, 25 Oct 2018 00:00:00 +0000</pubDate>
+      <guid>/post/juggling-netcdf-file-in-cdat-and-netcdf4-python/</guid>
+      <description>
+
+
+&lt;p&gt;People working in the field of atmospheric science and climate change often have to deal with data stored in a netCDF file format.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.unidata.ucar.edu/software/netcdf/&#34;&gt;NetCDF&lt;/a&gt; file has an extension &lt;em&gt;.nc&lt;/em&gt; and is used as a container of gridded data of different dimensions, variables and their associated attributes. Usually netCDF classic format is used to store the climate data.&lt;/p&gt;
+&lt;p&gt;Here we will use two different packages of python to access a model output in netcdf file format and access its variables.&lt;/p&gt;
+&lt;p&gt;We will be using the file which you can download from the following link. &lt;a href=&#34;https://drive.google.com/open?id=1Qb5oFg_6nK8nF5kztGyy4WPi5fvSgSj-&#34;&gt;CAM_run_2003_01_daily_data.nc&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;div id=&#34;cdat-way&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;CDAT way&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://cdat.llnl.gov/&#34;&gt;CDAT&lt;/a&gt; is a set of different python packages which together form a complete environment for climate data exploration and its visualization. It can access data in netCDF, HDF4 and grib data formats. For visualizing the results it includes packages such as VCS and matplotlib. To install CDAT using &lt;a href=&#34;https://conda.io/miniconda.html&#34;&gt;Conda&lt;/a&gt; run :
+&lt;br /&gt;
+&lt;code&gt;conda create -n cdat8 -c cdat/label/v80 -c conda-forge -c cdat python=2.7 cdat&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Import the cdms2 module
+import cdms2 &lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Load the netcdf file
+f = cdms2.open(&amp;#39;CAM_run_2003_01_daily_data.nc&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Store the variable names in a list 
+variable_names = f.listvariables()
+variable_names.sort()
+print (variable_names)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [&amp;#39;CLDTOT&amp;#39;, &amp;#39;CLOUD&amp;#39;, &amp;#39;P0&amp;#39;, &amp;#39;PS&amp;#39;, &amp;#39;hyam&amp;#39;, &amp;#39;hybm&amp;#39;, &amp;#39;time_bnds&amp;#39;]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Read the variable CLOUD 
+CLOUD_data = f(&amp;#39;CLOUD&amp;#39;)
+print (CLOUD_data.shape)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (31, 30, 192, 288)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here &lt;code&gt;(31,30,192,288)&lt;/code&gt; is the shape of the data where the first dimension is &lt;code&gt;time&lt;/code&gt;, second dimension is &lt;code&gt;levels&lt;/code&gt;, third dimension is &lt;code&gt;latitude&lt;/code&gt; and fourth dimension is &lt;code&gt;longitude&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;To know more about CDAT, follow the &lt;a href=&#34;https://cdms.readthedocs.io/en/cdmsdocsmerge/&#34;&gt;documentation&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;netcdf4-python-way&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;&lt;strong&gt;NetCDF4-python way&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;To install netcdf4-python using &lt;a href=&#34;https://conda.io/miniconda.html&#34;&gt;Conda&lt;/a&gt; run :
+&lt;br /&gt;
+&lt;code&gt;conda install -c conda-forge netcdf4&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Import the netCDF4 module
+import netCDF4 &lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Load the netcdf file
+f = netCDF4.Dataset(&amp;#39;CAM_run_2003_01_daily_data.nc&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Store the variable names in a list 
+variable_names = f.variables.keys() # variables in unicode
+variable_names = [x.encode(&amp;#39;UTF8&amp;#39;) for x in variable_names] # encode to string
+print (variable_names) &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [&amp;#39;CLDTOT&amp;#39;, &amp;#39;CLOUD&amp;#39;, &amp;#39;P0&amp;#39;, &amp;#39;PS&amp;#39;, &amp;#39;hyam&amp;#39;, &amp;#39;hybm&amp;#39;, &amp;#39;lat&amp;#39;, &amp;#39;lev&amp;#39;, &amp;#39;lon&amp;#39;, &amp;#39;time&amp;#39;, &amp;#39;time_bnds&amp;#39;]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;#--- Read the variable CLOUD 
+CLOUD_data = f.variables[&amp;#39;CLOUD&amp;#39;]
+print (CLOUD_data.shape)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## (31, 30, 192, 288)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To know more about netcdf4-python, follow the &lt;a href=&#34;http://unidata.github.io/netcdf4-python/&#34;&gt;documentation&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
